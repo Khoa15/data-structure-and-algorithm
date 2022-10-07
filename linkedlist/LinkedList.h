@@ -71,6 +71,7 @@ public:
             tmp = tmp->pNext;
         }
         tmp->pNext = p;
+        pTail = p;
     }
 
     void addNodeBeforeValue(Node* q, T y){
@@ -126,10 +127,11 @@ public:
             pHead = pTail = NULL;
             return;
         }
-        for(Node* tmp = pHead; tmp->pNext->pNext != NULL; tmp = tmp->pNext){
+        for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
             if(tmp->pNext->pNext == NULL){
+                delete pTail;
                 pTail = tmp;
-                delete tmp->pNext->pNext;
+                pTail->pNext = NULL;
                 return;
             }
         }
@@ -169,8 +171,22 @@ public:
     //1. c
     void deleteNodeLargerValue(T x){
         Node* tmp = pHead;
-        for(; tmp != NULL; tmp = tmp->pNext){
+        while(1){
+            if(tmp == NULL) return;
             if(tmp->val > x){
+                Node* p = tmp;
+                tmp = tmp->pNext;
+                deleteNode(p);
+                continue;
+            }
+            tmp = tmp->pNext;
+        }
+    }
+
+    //1.d
+    void deleteEvenList(){
+        for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+            if(tmp->val % 2 == 0){
                 deleteNode(tmp);
             }
         }
@@ -305,33 +321,33 @@ public:
     //./end 2. c
 
     //2. d
-    Node sumFraction(Node* a, Node* b){
+    Node* sumFraction(Node* a, Node* b){
         if(a == NULL || b == NULL) return NULL;
         int top = a->val * b->bot + b->val * a->bot,
             bot = a->bot * b->bot; 
-        Node c = *c.create(top, bot);
+        Node* c = c->create(top, bot);
         return c;
     }
     Node* sumListFraction(){
         if(pHead == NULL) return NULL;
         Node* sum = pHead; 
         for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
-            sum = &sumFraction(sum, tmp);
+            sum = sumFraction(sum, tmp);
         }
         return sum;
     }
-    Node multipleFraction(Node* a, Node* b){
+    Node* multipleFraction(Node* a, Node* b){
         if(a == NULL || b == NULL) return NULL;
         int top = a->val * b->val,
             bot = a->bot * b->bot;
-        Node c = *c.create(top, bot);
+        Node* c = c->create(top, bot);
         return c;
     }
     Node* multipleListFraction(){
         if(pHead == NULL) return NULL;
         Node* multiple = pHead;
         for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
-            multiple = &multipleFraction(multiple, tmp);
+            multiple = multipleFraction(multiple, tmp);
         }
 
         return multiple;
@@ -342,14 +358,14 @@ public:
     bool isFracALargerB(Node* a, Node* b){
         return (a->val / a->bot > b->val / b->bot) ? true : false;
     }
-    Node findMaxMinFraction(bool isFindMax = false){
+    Node* findMaxMinFraction(bool isFindMax = false){
         if(pHead == NULL) return NULL;
-        Node result = *pHead;
+        Node* result = pHead;
         for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
-            bool check = isFracALargerB(&result, tmp);
+            bool check = isFracALargerB(result, tmp);
             if((isFindMax == false && check == true) ||
                 (isFindMax == true && check == false)){
-                result = *tmp;
+                result = tmp;
             }
         }
         return result;
@@ -360,7 +376,7 @@ public:
     void plusFractionToOne(){
         Node a = *a.create(1, 1);
         for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
-            tmp = &sumFraction(&a, tmp);
+            tmp = sumFraction(&a, tmp);
         }
     }
     //./ end 2. f
