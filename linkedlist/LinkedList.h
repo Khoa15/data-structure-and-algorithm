@@ -7,33 +7,31 @@ Nguyễn Trọng Đăng Khoa
 #include <math.h>
 typedef int T;
 
-template<typename N>
+
+/*
+Node cho cả bài 1 và bài 2;
+    bài 1 là số nguyên val/1 thì bot là 1;
+    bài 2 là phân số val/bot;
+*/
 struct Node{
     T val;
+    T bot;
     Node* pNext;
-    Node() : val(0), pNext(NULL) {}
-    Node(T x) : val(x), pNext(NULL) {}
-    Node(T x, Node* next) : val(x), pNext(next) {}
+    Node() : val(0), bot(1), pNext(NULL) {}
+    Node(T x) : val(x), bot(1), pNext(NULL) {}
+    Node(T x, T y) : val(x), bot(y), pNext(NULL) {}
+    Node(T x, Node* next) : val(x), bot(1), pNext(next) {}
+    Node(T x, T y, Node* next) : val(x), bot(y), pNext(next) {}
 
     void showNode(){
         std::cout << val;
     }
 
-    Node* create(T x){
-        Node* p = new Node(x);
+    Node* create(T x, T y = 1){
+        Node* p = new Node(x, y);
         if(p == NULL) return NULL;
         return p;
     }
-};
-
-struct PhanSo{
-    T tu;
-    T mau;
-    PhanSo* pNext;
-    PhanSo() : tu(0), mau(1), pNext(NULL){}
-    PhanSo(T x, T y) : tu(x), mau(y), pNext(NULL){}
-    PhanSo(T x, T y, PhanSo* pNext) : tu(x), mau(y), pNext(NULL) {}
-
 };
 
 class SList{
@@ -51,6 +49,7 @@ public:
     */
 
     void addHead(Node* p){
+        if(p == NULL) return;
         if(pHead == NULL){
             pHead = p;
             pTail = p;
@@ -61,6 +60,7 @@ public:
     }
 
     void addTail(Node* p){
+        if(p == NULL) return;
         if(pHead == NULL){
             pHead = p;
             pTail = p;
@@ -266,6 +266,125 @@ public:
             }
         }
     }
+
+    //2. b
+    void inputFraction(int n){
+        int top = 0, bot = 1;
+        for(int i = 0; i < n; i++){
+            printf("Nhap top va bot: ");
+            scanf("%d %d", &top, &bot);
+            Node* p;
+            addTail(p->create(top, bot));
+        }
+    }
+
+    void printListFraction(){
+        for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+            std::cout << tmp->val << "/" << tmp->bot << " ";
+        }
+    }
+
+    //./end 2. b
+
+    //2. c
+    int gcd(int a, int b){
+        if(b == 0) return a;
+        return gcd(b, a % b);
+    }
+    Node* simplifyFraction(Node* a){
+        int UCLN = gcd(a->val, a->bot);
+        a->val /= UCLN;
+        a->bot /= UCLN;
+        return a;
+    } 
+    void simplifyListFraction(){
+        for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+            tmp = simplifyFraction(tmp);
+        }
+    }
+    //./end 2. c
+
+    //2. d
+    Node sumFraction(Node* a, Node* b){
+        if(a == NULL || b == NULL) return NULL;
+        int top = a->val * b->bot + b->val * a->bot,
+            bot = a->bot * b->bot; 
+        Node c = *c.create(top, bot);
+        return c;
+    }
+    Node* sumListFraction(){
+        if(pHead == NULL) return NULL;
+        Node* sum = pHead; 
+        for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
+            sum = &sumFraction(sum, tmp);
+        }
+        return sum;
+    }
+    Node multipleFraction(Node* a, Node* b){
+        if(a == NULL || b == NULL) return NULL;
+        int top = a->val * b->val,
+            bot = a->bot * b->bot;
+        Node c = *c.create(top, bot);
+        return c;
+    }
+    Node* multipleListFraction(){
+        if(pHead == NULL) return NULL;
+        Node* multiple = pHead;
+        for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
+            multiple = &multipleFraction(multiple, tmp);
+        }
+
+        return multiple;
+    }
+    //./end 2. d
+
+    //2. e
+    bool isFracALargerB(Node* a, Node* b){
+        return (a->val / a->bot > b->val / b->bot) ? true : false;
+    }
+    Node findMaxMinFraction(bool isFindMax = false){
+        if(pHead == NULL) return NULL;
+        Node result = *pHead;
+        for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
+            bool check = isFracALargerB(&result, tmp);
+            if((isFindMax == false && check == true) ||
+                (isFindMax == true && check == false)){
+                result = *tmp;
+            }
+        }
+        return result;
+    }
+    //./ end 2. e
+
+    //2. f
+    void plusFractionToOne(){
+        Node a = *a.create(1, 1);
+        for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+            tmp = &sumFraction(&a, tmp);
+        }
+    }
+    //./ end 2. f
+
+    //2. g
+    void printFractionLargeOne(){
+        Node a = *a.create(1, 1);
+        for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+            if(isFracALargerB(tmp, &a)){
+                std::cout << tmp->val << "/" << tmp->bot << " ";
+            }
+        }
+    }
+    //./ end 2. g
+
+    //2. h
+    Node* findFraction(Node* p){
+        for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+            if(p->val == tmp->val && p->bot == tmp->bot){
+                return tmp;
+            }
+        }
+    }
+    //./ end 2. h
 
     void printSList(){
         for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
