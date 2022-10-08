@@ -1,90 +1,109 @@
-/*
+﻿/*
 Nguyễn Trọng Đăng Khoa
 2001215879
 12DHTHTD
 */
 #include <iostream>
 #include <math.h>
-typedef int T;
-int gcd(int a, int b){
-    if(b == 0) return a;
-    return gcd(b, a % b);
-}
-struct Node{
-    T val;
-    T bot;
+typedef int Data;
+
+class Node {
+public:
+    Data top;
+    Data bot;
     Node* pNext;
-    Node() : val(0), bot(1), pNext(NULL) {}
-    Node(T x) : val(x), bot(1), pNext(NULL) {}
-    Node(T x, T y) : val(x), bot(y), pNext(NULL) {}
-    Node(T x, Node* next) : val(x), bot(1), pNext(next) {}
-    Node(T x, T y, Node* next) : val(x), bot(y), pNext(next) {}
+    Node() : top(0), bot(1), pNext(NULL) {}
+    Node(Data x) : top(x), bot(1), pNext(NULL) {}
+    Node(Data x, Data y) : top(x), bot(y), pNext(NULL) {}
+    Node(Data x, Node* next) : top(x), bot(1), pNext(next) {}
+    Node(Data x, Data y, Node* next) : top(x), bot(y), pNext(next) {}
 
-    void showNode(){
-        std::cout << val;
-    }
-
-    Node* create(T x, T y = 1){
-        Node* p = new Node(x, y);
-        if(p == NULL) return NULL;
+    Node* create(Data x) {
+        Node* p = new Node(x);
+        if (p == NULL) {
+            std::cout << "Memory is not enough";
+        }
         return p;
     }
 
-    void plus(Node* b){
-        Node kq;
-        kq.val = val * b->bot + bot * b->val;
-        kq.bot = bot * b->bot;
+    Node plus(Node* b) {
+        Node result;
+        result.top = top * b->bot + bot * b->top;
+        result.bot = bot * b->bot;
+        return result;
     }
 
-    void simplify(){
-        int ucln = gcd(val, bot);
-        val /= ucln;
+    Node multiple(Node* b) {
+        Node result;
+        result.top = top * b->top;
+        result.bot = bot * b->bot;
+        return result;
+    }
+
+    float divide() {
+        return top / bot;
+    }
+
+    void erase() {
+        delete this;
+    }
+
+    void simplify() {
+        int ucln = gcd(top, bot);
+        top /= ucln;
         bot /= ucln;
+    }
+
+    void print() {
+        std::cout << top << "/" << bot << " ";
     }
 };
 
-class SList{
+class SList {
     Node* pHead;
     Node* pTail;
 public:
-    SList(): pHead(NULL), pTail(NULL) {}
+    SList() : pHead(NULL), pTail(NULL) {}
     SList(Node* p) : pHead(p), pTail(p) {}
-    ~SList() {delete []pHead;}
+    ~SList() { delete[] pHead; delete pTail; }
+    
+    bool isEmpty() { return pHead == NULL; }
+    Node* getHead() { return pHead; }
+    Node* getTail() { return pTail; }
+    void setHead(Node* x) { pHead = x; }
+    void setTail(Node* x) { pTail = x; }
 
-    bool isEmpty(){return pHead == NULL;}
     void addHead(Node* p);
     void addTail(Node* p);
-    void addNodeBeforeValue(Node* q, T y);
-    bool isExist(Node* p);
-    void addAfterNode( Node* cur, Node* p);
-    void deleteHead();
-    void deleteTail();
-    void deleteAfterNode(Node* q);
+    void addXBeforeY(Data x, Data y);
     void deleteNode(Node* p);
-    void deleteNodeLargerValue(T x);
-    void deleteEvenList();
-    void swap(T& a, T& b);
-    void sortSList(bool isASC = 0);
-    bool isPrime(int val);
-    int countPrime();
-    bool isSquareNumber(int val);
-    int countSquareNumber();
-    Node* findMinValue();
-    Node* findMaxValue();
-    int countALarger2B();
-    void decideOddEven(SList* sl1, SList* sl2);
-    void inputFraction(int n);
-    void printListFraction();
-    Node* simplifyFraction(Node* a);
+    void deleteNodeLargerX(Data x);
+    void deleteEvenVal();
+    void sort(bool isASC = false);
+    int countPrimeNumber();
+    int totalSquareNumber();
+    Node* findMinVal();
+    Node* findMaxVal();
+    int countXLarger2Y();
+    void divideList(SList* sl1, SList* sl2);
+
+    void printSList(bool isFraction = false) {
+        for (Node* p = pHead; p != NULL; p = p->pNext) {
+            if (isFraction == false)
+                std::cout << p->top << " ";
+            else
+                std::cout << p->top << "/" << p->bot << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    //2
+    void getListInput(int n);
     void simplifyListFraction();
     Node sumListFraction();
-    Node* multipleFraction(Node* a, Node* b);
-    Node* multipleListFraction();
-    bool isFracALargerB(Node* a, Node* b);
-    Node* findMaxMinFraction(bool isFindMax = false);
-    Node plusFractionToOne();
-    void printFractionLargeOne();
-    Node* findFraction(Node* p);
-    void printSList();
-    void deleteSList(Node* p);
+    Node multipleListFraction();
+    Node* findMinFraction();
+    Node* findMaxFraction();
+    Node* printListFractionLargeY(Data y = 1);
+    Node* findNode(Node x);
 };
