@@ -3,61 +3,12 @@ Nguyễn Trọng Đăng Khoa
 2001215879
 12DHTHTD
 */
+#pragma once
+#ifndef _LINKED_LIST_
+#define _LINKED_LIST_
 #include <iostream>
 #include <math.h>
-typedef int Data;
-
-class Node {
-public:
-    Data top;
-    Data bot;
-    Node* pNext;
-    Node() : top(0), bot(1), pNext(NULL) {}
-    Node(Data x) : top(x), bot(1), pNext(NULL) {}
-    Node(Data x, Data y) : top(x), bot(y), pNext(NULL) {}
-    Node(Data x, Node* next) : top(x), bot(1), pNext(next) {}
-    Node(Data x, Data y, Node* next) : top(x), bot(y), pNext(next) {}
-
-    Node* create(Data x) {
-        Node* p = new Node(x);
-        if (p == NULL) {
-            std::cout << "Memory is not enough";
-        }
-        return p;
-    }
-
-    Node plus(Node* b) {
-        Node result;
-        result.top = top * b->bot + bot * b->top;
-        result.bot = bot * b->bot;
-        return result;
-    }
-
-    Node multiple(Node* b) {
-        Node result;
-        result.top = top * b->top;
-        result.bot = bot * b->bot;
-        return result;
-    }
-
-    float divide() {
-        return top / bot;
-    }
-
-    void erase() {
-        delete this;
-    }
-
-    void simplify() {
-        int ucln = gcd(top, bot);
-        top /= ucln;
-        bot /= ucln;
-    }
-
-    void print() {
-        std::cout << top << "/" << bot << " ";
-    }
-};
+#include "Node.h"
 
 class SList {
     Node* pHead;
@@ -104,6 +55,9 @@ public:
     Node multipleListFraction();
     Node* findMinFraction();
     Node* findMaxFraction();
-    Node* printListFractionLargeY(Data y = 1);
+    void plusListFraction(Data x = 1);
+    void printListFractionLargeY(Data y = 1);
     Node* findNode(Node x);
 };
+
+#endif

@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Helper.h"
 #include "LinkedList.h"
-
 void SList::addHead(Node* p) {
 	if (isEmpty() == true) {
 		setHead(p);
@@ -81,7 +80,7 @@ void SList::sort(bool isASC){
 int SList::countPrimeNumber(){
 	int result = 0;
 	for (Node* p = pHead; p != NULL; p = p->pNext) {
-		if (isPrime(p->top) == true) {
+		if (isPrime(p->top)) {
 			result += 1;
 		}
 	}
@@ -90,7 +89,7 @@ int SList::countPrimeNumber(){
 int SList::totalSquareNumber(){
 	int result = 0;
 	for (Node* p = pHead; p != NULL; p = p->pNext) {
-		if (isSquare(p->top)) {
+		if (isSquare(p->top) == true) {
 			result += p->top;
 		}
 	}
@@ -139,7 +138,7 @@ void SList::getListInput(int n) {
 	for (int i = 0; i < n; i++) {
 		Node* p = new Node();
 		printf("Nhap tu va phan so: ");
-		scanf_s("%d%d", p->top, p->bot);
+		scanf_s("%d%d", &p->top, &p->bot);
 		addTail(p);
 	}
 }
@@ -183,7 +182,14 @@ Node* SList::findMaxFraction() {
 	return result;
 }
 
-Node* SList::printListFractionLargeY(Data y) {
+void SList::plusListFraction(Data x) {
+	Node tmp(x);
+	for (Node* p = pHead; p != NULL; p = p->pNext) {
+		p->plus(&tmp);
+	}
+}
+
+void SList::printListFractionLargeY(Data y) {
 	// Default: y = 1
 	for (Node* p = pHead; p != NULL; p = p->pNext) {
 		if(p->divide() > y*1.0)p->print();

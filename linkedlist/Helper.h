@@ -1,4 +1,8 @@
+﻿#pragma once
+#ifndef _HELPER_
+#define _HELPER_
 #include <math.h>
+
 template<class T>void swap(T& a, T& b) {
 	T c = a;
 	a = b;
@@ -24,3 +28,4 @@ int gcd(int a, int b) {
 	if (b == 0) return a;
 	return gcd(b, a % b);
 }
+#endif
