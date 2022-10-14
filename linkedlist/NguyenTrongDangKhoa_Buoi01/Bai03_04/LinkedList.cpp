@@ -1,15 +1,14 @@
 #include "LinkedList.h"
-using namespace std;
-#include "Helper.h"
+#include <algorithm>
 void SList::printList() {
 	for (Node* tmp = getHead(); tmp != NULL; tmp = tmp->Next()) {
-		printf("%d", tmp->Info());
+		std::cout << tmp->Info() << " ";
 	}
 }
 void SList::addNode(int x) {
 	Node* p = new Node(x);
 	if (p == NULL) {
-		printf("Your memory is not enough");
+		std::cout << "Your memory is not enough";
 		return;
 	}
 	if (getHead() == false) {
@@ -24,25 +23,25 @@ void SList::addNode(int x) {
 		}
 	}
 }
-void SList::connectSListAfterX(SList* sl, int x) {
+void SList::connectSListAfterX(SList* sl2, int x) {
 	bool flag = false;
 	for (Node* tmp = getHead(); tmp != NULL; tmp = tmp->Next()) {
 		if (tmp->Info() == x) {
-			sl->setTail(tmp->Next());
-			tmp->setNext(sl->getHead());
-			delete sl;
+			sl2->setTail(tmp->Next());
+			tmp->setNext(sl2->getHead());
+			delete sl2;
 			flag = true;
 			break;
-		}
+		} 
 	}
 	if (flag == false) {
-		printf("Khong co phan tu x\n");
+		std::cout << "Khong co phan tu x\n";
 	}
 }
 void SList::printASC(Node* cur) {
 	if (cur == NULL) return;
 	printASC(cur->Next());
-	printf("%d ", cur->Info());
+	std::cout << cur->Info() << " ";
 }
 
 void SList::sort(bool isASC = false) {
@@ -54,7 +53,7 @@ void SList::sort(bool isASC = false) {
 				min = y->Info();
 			}
 		}
-		swap(x->Info(), min);
+		std::swap(x->Info(), min);
 	}
 }
 void SList::merge(SList* sl) {
@@ -79,7 +78,7 @@ void SList::mergeEvenASCOddDESC(SList* sl) {
 					key = y->Info();
 				}
 			}
-			swap(x->Info(), key);
+			std::swap(x->Info(), key);
 		}
 		else {
 			key = x->Info();
@@ -88,7 +87,7 @@ void SList::mergeEvenASCOddDESC(SList* sl) {
 					key = y->Info();
 				}
 			}
-			swap(x->Info(), key);
+			std::swap(x->Info(), key);
 		}
 	}
 }
@@ -104,7 +103,7 @@ void SList::mergeEvenPosASCOddPosDESC(SList* sl) {
 					key = y->Info();
 				}
 			}
-			swap(x->Info(), key);
+			std::swap(x->Info(), key);
 		}
 		else {
 			key = x->Info();
@@ -113,7 +112,7 @@ void SList::mergeEvenPosASCOddPosDESC(SList* sl) {
 					key = y->Info();
 				}
 			}
-			swap(x->Info(), key);
+			std::swap(x->Info(), key);
 		}
 		i++;
 	}

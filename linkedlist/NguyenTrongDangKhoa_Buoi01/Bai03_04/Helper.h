@@ -3,14 +3,6 @@
 #define _HELPER_
 #include <math.h>
 
-template<class T>
-int swap(T& a, T& b) {
-	T c = a;
-	a = b;
-	b = c;
-	return 1;
-}
-
 bool isPrime(int x) {
 	if (x < 2) return false;
 	for (int i = 0; i < sqrt(x); i++) {

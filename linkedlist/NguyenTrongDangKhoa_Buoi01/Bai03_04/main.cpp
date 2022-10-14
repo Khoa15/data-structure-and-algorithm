@@ -5,7 +5,7 @@ void Menu(short int option);
 void Bai3(SList* sl, SList* sl2);
 void Bai4(SList* sl, SList* sl1, SList* sl2);
 
-void main() {
+int  main() {
 	short int option = 0;
 	SList* sl = new SList(), *sl1 = new SList(), * sl2 = new SList();
 	sl->createSList();
@@ -22,7 +22,7 @@ void main() {
 			Bai4(sl, sl1, sl2);
 			break;
 		case 0:
-			return;
+			return 0;
 			break;
 		default:
 			option = 0;
@@ -73,7 +73,7 @@ void Bai3(SList* sl, SList* sl2) {
 		break;
 	case 2:
 		printf("Enter value's x: ");
-		scanf_s("%d", &x);
+		scanf("%d", &x);
 		sl->addNode(x);
 		break;
 	case 3:
@@ -81,7 +81,7 @@ void Bai3(SList* sl, SList* sl2) {
 		break;
 	case 4:
 		printf("Enter value's x: ");
-		scanf_s("%d", &x);
+		scanf("%d", &x);
 		sl->connectSListAfterX(sl2, x);
 		break;
 	}

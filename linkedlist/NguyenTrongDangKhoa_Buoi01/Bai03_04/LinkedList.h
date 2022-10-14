@@ -2,6 +2,7 @@
 #ifndef _LINKED_LIST_
 #define _LINKED_LIST_
 #include <iostream>
+#include "Helper.h"
 class Node {
 	int info;
 	Node* pNext;
@@ -28,11 +29,6 @@ public:
 	~SList() {
 		delete[] pHead;
 	}
-	void createSList() {
-		for (int i = 0; i < randrange(4, 10); i++) {
-			addNode(randrange(-10, 15));
-		}
-	}
 	Node* getHead() { return pHead; }
 	void setHead(Node* p) { pHead = p; }
 	Node* getTail() { return pTail; }
@@ -50,5 +46,12 @@ public:
 	void mergeDESC(SList* sl);
 	void mergeEvenASCOddDESC(SList* sl);
 	void mergeEvenPosASCOddPosDESC(SList* sl);
+	
+	
+	void createSList() {
+		for (int i = 0; i < randrange(4, 10); i++) {
+			addNode(randrange(-10, 15));
+		}
+	}
 };
 #endif
