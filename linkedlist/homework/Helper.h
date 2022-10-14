@@ -1,0 +1,38 @@
+#pragma once
+#ifndef _HELPER_
+#define _HELPER_
+#include <math.h>
+
+template<class T>
+int swap(T& a, T& b) {
+	T c = a;
+	a = b;
+	b = c;
+	return 1;
+}
+
+bool isPrime(int x) {
+	if (x < 2) return false;
+	for (int i = 0; i < sqrt(x); i++) {
+		if (x % i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool isSquare(int x) {
+	if (sqrt(x) * sqrt(x) == x) return true;
+	return false;
+}
+
+int gcd(int a, int b) {
+	if (b == 0) return a;
+	return gcd(b, a % b);
+}
+
+int randrange(int min, int max) {
+	srand(time(0));
+	return (rand() % (max - min + 1)) + min;
+}
+#endif
