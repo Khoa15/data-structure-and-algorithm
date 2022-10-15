@@ -2,8 +2,29 @@
 #include <cmath>
 #include <string.h>
 #include <algorithm>
-void SList::addTail(Data x) {
-    Node* p = new Node(x);
+using namespace std;
+void Node::showNode(){
+    printf(
+        "%-5s %-5s %-5s %-5d %f\n",
+        info.maSV,
+        info.hoDem,
+        info.tenSV,
+        info.namSinh,
+        info.diemKQ
+        );
+    cout << "Ma SV: " << info.maSV << endl
+        << "Ho dem: " << info.hoDem << endl
+        << "Ten SV: " << info.tenSV << endl
+        << "Nam sinh: " << info.namSinh << endl
+        << "Diem KQ: " << info.diemKQ << endl
+        << "==============\n"
+        ;
+}
+void Node::getInput(){
+    
+}
+void SList::addTail(Node* p) {
+    // Node* p = new Node(x);
 	if (pHead == NULL) {
 		pHead = p;
 		pTail = p;
@@ -122,16 +143,79 @@ void SList::setNodeToHead(Node* p){
 }
 
 Data getInputSong(){
-    Data song;
-    printf("Nhap ten bai hat: ");
-    scanf("%s", song.name);
-    printf("Nhap ten tac gia: ");
-    scanf("%s", song.author);
-    printf("Nhap ten ca sy: ");
-    scanf("%s", song.singer);
-    printf("Nhap thoi gain HAT: ");
-    scanf("%d", &song.time);
-    return song;
+    
+}
+//=================================================
+Node* SList::findStudent(char *Id){
+    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+        if(strcmp(tmp->info.maSV, Id) == 0){
+            return tmp;
+        }
+    }
+    printf("Student not found\n");
+    return NULL;
+}
+void SList::sortBy(char *type){
+    short int b_type = strcmp(type, "id") == 0 ? 1 : strcmp(type, "name") ? 2 : 0;
+    if(b_type == 0) return;
+    for(Node* x = pHead; x->pNext != NULL; x = x->pNext){
+        for(Node* y = pHead->pNext; y != NULL; y = y->pNext){
+            switch (b_type)
+            {
+            case 1:
+                if(y->info < x->info){
+                    swap(y->info, x->info);
+                }
+                break;
+            case 2:
+                if(y->info < x->info){
+                    swap(y->info, x->info);
+                }
+                break;
+            }
+        }
+    }
+}
+void SList::addStudent(Node* p){
+    if(pHead == NULL){
+        pHead = p;
+        pTail = p;
+        return;
+    }
+    if(pHead->info.maSV > p->info.maSV){
+        p->pNext = pHead;
+        pHead = p;
+        return;
+    }
+    if(pTail->info.maSV < p->info.maSV){
+        pTail->pNext = p;
+        pTail = p;
+        return;
+    }
+    for(Node* tmp = pHead; tmp->pNext != NULL; tmp = tmp->pNext()){
+        if(p->info.maSV < tmp->pNext->info.maSV){
+            addNodeXAfterNodeY(p, tmp);
+        }
+    }
+}
+void SList::deleteStudent(Node* p){
+    //
+}
+SList* SList::createNewListDESCByScore(){
+    SList *sl = new SList;
+    sortBy("score");
+    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+        sl->addTail(tmp);
+    }
+}
+void SList::printStudents(){
+
+}
+void SList::maxScore(){
+
+}
+void SList::minScore(){
+
 }
 
 void Menu();

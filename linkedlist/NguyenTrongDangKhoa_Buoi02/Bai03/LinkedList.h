@@ -26,16 +26,8 @@ public:
     Node() : pNext(NULL) {}
     Node(Data x) : info(x), pNext(NULL) {}
     Node(Data x, Node* next) : info(x), pNext(next) {}
-    void showNode(){
-        printf(
-            "%-5s %-5s %-5s %-5d %f\n",
-            info.maSV,
-            info.hoDem,
-            info.tenSV,
-            info.namSinh,
-            info.diemKQ
-            );
-    }
+    void showNode();
+    void getInput();
 };
 
 class SList {
@@ -46,7 +38,9 @@ public:
     SList(Node* p) : pHead(p), pTail(p) {}
     ~SList() { delete[] pHead; delete pTail; }
 
+    void addTail(Node* x);
     void printList();
+    void addNodeXAfterNodeY(Node* x, Node* y);
     //1
     void getFile(char* _filename);
     void deleteNode(Node* p);
@@ -60,10 +54,10 @@ public:
     void setNodeToHead(Node* p);
 
     Node* findStudent(char *Id);//a, b
-    void sortBy();//c, d
-    void addStudent();
+    void sortBy(char *type = "id");//c, d
+    void addStudent(Node* x);
     void deleteStudent(Node* p);
-    void createNewListDESCByScore();
+    SList* createNewListDESCByScore();
     void printStudents();
     void maxScore();
     void minScore();
