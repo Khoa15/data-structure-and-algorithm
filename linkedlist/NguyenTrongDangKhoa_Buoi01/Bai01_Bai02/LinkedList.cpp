@@ -1,7 +1,9 @@
 #include "LinkedList.h"
 #include "Helper.h"
 #include <iostream>
+#if _WIN32
 #include <Windows.h>
+#endif
 void SList::addHead(Node* p) {
 	if (isEmpty() == true) {
 		setHead(p);
@@ -334,7 +336,9 @@ void Control(SList* sl, int position, int to, SList* sl1 = NULL, SList* sl2 = NU
 }
 
 int main() {
+    #if _WIN32
     SetConsoleOutputCP(CP_UTF8);
+    #endif
     int position = 0, to = -1;
     SList* sl = new SList();
     SList* sl1 = new SList();
