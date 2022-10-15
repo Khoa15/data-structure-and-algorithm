@@ -30,7 +30,7 @@ void SList::addXBeforeY(Data x, Data y){
 		return;
 	}
 	for (Node* tmp = pHead; tmp->pNext != NULL; tmp = tmp->pNext) {
-		if (tmp->pNext->pNext->top == y) {
+		if (tmp->pNext->top == y) {
 			Node* p = new Node(x);
 			p->pNext = tmp->pNext;
 			tmp->pNext = p;
@@ -138,7 +138,7 @@ void SList::getListInput(int n) {
 	for (int i = 0; i < n; i++) {
 		Node* p = new Node();
 		printf("Nhap tu va phan so: ");
-		scanf_s("%d%d", &p->top, &p->bot);
+		scanf("%d%d", &p->top, &p->bot);
 		addTail(p);
 	}
 }

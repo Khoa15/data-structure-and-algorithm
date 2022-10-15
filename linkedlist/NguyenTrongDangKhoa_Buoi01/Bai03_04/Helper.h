@@ -2,7 +2,7 @@
 #ifndef _HELPER_
 #define _HELPER_
 #include <math.h>
-
+#include <time.h>
 bool isPrime(int x) {
 	if (x < 2) return false;
 	for (int i = 0; i < sqrt(x); i++) {
@@ -24,7 +24,6 @@ int gcd(int a, int b) {
 }
 
 int randrange(int min, int max) {
-	srand(time(0));
 	return (rand() % (max - min + 1)) + min;
 }
 #endif

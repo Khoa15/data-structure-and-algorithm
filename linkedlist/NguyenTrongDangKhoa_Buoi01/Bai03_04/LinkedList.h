@@ -12,10 +12,16 @@ public:
 	Node(int x, Node* next) : info(x), pNext(next) {}
 
 	Node* Next() { return pNext; }
-	Node* setNext(Node* p) {
+	void setNext(Node* p) {
 		pNext = p;
 	}
+	void setInfo(int x){ info = x;}
 	int Info() { return info; }
+	void swapVal(Node* q){
+		int tmp = info;
+		info = q->Info();
+		q->setInfo(tmp);
+	}
 };
 
 class SList {
@@ -26,8 +32,15 @@ public:
 		pHead = NULL;
 		pTail = NULL;
 	}
-	~SList() {
-		delete[] pHead;
+	void deleteList(){
+		Node* tmp = pHead;
+		while(tmp != NULL){
+			Node* next = tmp->Next();
+			delete tmp;
+			tmp = next;
+		}
+		pHead = NULL;
+		pTail = NULL;
 	}
 	Node* getHead() { return pHead; }
 	void setHead(Node* p) { pHead = p; }
@@ -40,7 +53,7 @@ public:
 	void connectSListAfterX(SList* sl, int x);
 
 	//4
-	void sort(bool isASC = false);
+	void sortList(bool isASC = false);
 	void merge(SList* sl);
 	void mergeASC(SList* sl);
 	void mergeDESC(SList* sl);
