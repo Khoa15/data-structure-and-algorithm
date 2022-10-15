@@ -63,10 +63,10 @@ void SList::printASC(Node* cur) {
 }
 
 void SList::sortList(bool isASC) {
-	for (Node* x = getHead(); x != NULL; x = x->Next()){
+	for (Node* x = getHead(); x->Next() != NULL; x = x->Next()){
 		Node* min = x;
 		for (Node* y = x->Next(); y != NULL; y = y->Next()) {
-			if (min->Info() > y->Info()) {
+			if (min->Info() > y->Info() && isASC == false || isASC == true && min->Info() < y->Info()) {
 				min = y;
 			}
 		}
@@ -74,13 +74,22 @@ void SList::sortList(bool isASC) {
 	}
 }
 void SList::merge(SList* sl) {
-	if(pHead == NULL){
-		setHead(sl->getHead());
-		setTail(sl->getTail());
-		return;
+	Node* tmp = sl->getHead();
+	// if(pHead == NULL){
+	// 	pHead = new Node(sl->getHead()->Info());
+	// 	pTail = new Node(sl->getTail()->Info());
+	// }
+	while(tmp != NULL){
+		addNode(tmp->Info());
+		tmp = tmp->Next();
 	}
-	getTail()->setNext(sl->getHead());
-	setTail(sl->getTail());
+	// if(pHead == NULL){
+	// 	setHead(slcopy.getHead());
+	// 	setTail(slcopy.getTail());
+	// 	return;
+	// }
+	// getTail()->setNext(slcopy.getHead());
+	// setTail(slcopy.getTail());
 }
 void SList::mergeASC(SList* sl) {
 	merge(sl);
@@ -105,7 +114,7 @@ void SList::mergeEvenASCOddDESC(SList* sl) {
 		else {
 			key = x;
 			for (Node* y = x->Next(); y != NULL; y = y->Next()) {
-				if (y->Info() % 2 == 0 && y->Info() < key->Info()) {
+				if (y->Info() % 2 != 0 && y->Info() > key->Info()) {
 					key = y;
 				}
 			}
@@ -121,16 +130,22 @@ void SList::mergeEvenPosASCOddPosDESC(SList* sl) {
 		if (i % 2 == 0) {
 			key = x;
 			for (Node* y = x->Next(); y != NULL; y = y->Next()) {
-				if (y->Info() % 2 == 0 && y->Info() < key->Info()) {
+				if (y->Info() < key->Info()) {
 					key = y;
+				}
+				if(y->Next() != NULL){
+					y = y->Next();
 				}
 			}
 		}
 		else {
 			key = x;
 			for (Node* y = x->Next(); y != NULL; y = y->Next()) {
-				if (y->Info() % 2 == 0 && y->Info() < key->Info()) {
+				if (y->Info() > key->Info()) {
 					key = y;
+				}
+				if(y->Next() != NULL){
+					y = y->Next();
 				}
 			}
 		}
@@ -144,7 +159,9 @@ void Bai4(SList* sl, SList* sl1, SList* sl2);
 
 int  main() {
 	srand(time(0));
+	#if _WIN32
 	SetConsoleOutputCP(65001);
+	#endif
 	short int option = 0;
 	SList* sl = new SList(), *sl1 = new SList(), * sl2 = new SList();
 	sl->createSList();
@@ -255,17 +272,42 @@ void Bai4(SList* sl, SList* sl1, SList* sl2) {
 	case 2:
 		sl->mergeASC(sl2);
 		sl->mergeASC(sl1);
+		printf("SL: ");
+		sl->printList();
+		printf("\nSL1: ");
+		sl1->printList();
+		printf("\nSL2: ");
+		sl2->printList();
 		break;
 	case 3:
 		sl->mergeDESC(sl2);
 		sl->mergeDESC(sl1);
+		printf("SL: ");
+		sl->printList();
+		printf("\nSL1: ");
+		sl1->printList();
+		printf("\nSL2: ");
+		sl2->printList();
 		break;
 	case 4:
 		sl->mergeEvenASCOddDESC(sl2);
 		sl->mergeEvenASCOddDESC(sl1);
+		printf("SL: ");
+		sl->printList();
+		printf("\nSL1: ");
+		sl1->printList();
+		printf("\nSL2: ");
+		sl2->printList();
 		break;
 	case 5:
-		sl1->mergeEvenPosASCOddPosDESC(sl2);
+		sl->mergeEvenPosASCOddPosDESC(sl1);
+		sl->mergeEvenPosASCOddPosDESC(sl2);
+		printf("SL: ");
+		sl->printList();
+		printf("\nSL1: ");
+		sl1->printList();
+		printf("\nSL2: ");
+		sl2->printList();
 		break;
 	}
 }
