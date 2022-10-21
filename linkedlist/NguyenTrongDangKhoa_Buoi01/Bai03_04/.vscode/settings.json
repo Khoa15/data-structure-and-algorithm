@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "files.associations": {
         "algorithm": "cpp",
@@ -8,4 +9,16 @@
         "utility": "cpp",
         "xstring": "cpp"
     }
+=======
+{
+    "files.associations": {
+        "algorithm": "cpp",
+        "xutility": "cpp",
+        "exception": "cpp",
+        "memory": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "xstring": "cpp"
+    }
+>>>>>>> 5854172727e5b18115b37e978688197f95627cef
 }

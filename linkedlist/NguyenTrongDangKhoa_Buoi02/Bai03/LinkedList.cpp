@@ -2,8 +2,51 @@
 #include <cmath>
 #include <string.h>
 #include <algorithm>
-void SList::addTail(Data x) {
-    Node* p = new Node(x);
+#include <fstream>
+using namespace std;
+Node* createNode(Data Info){
+    Node *p = new Node(Info);
+    if(p == NULL){
+        printf("Memory is not enough");
+        return NULL;
+    }
+    return p;
+}
+void SList::getInputNode(Data* info){
+    do{
+        cout << "Nhap MSSV: ";
+        cin >> info->maSV;
+    }while(this->findStudentById(info));
+    cout << "Nhap Ho Dem: ";
+    cin >> info->hoDem;
+    cout << "Nhap Ten: ";
+    cin >> info->tenSV;
+    cout << "Nhap nam sinh: ";
+    cin >> info->namSinh;
+    cout << "Nhap diem KQ: ";
+    cin >> info->diemKQ;
+}
+void Node::showNode(){
+    // printf(
+    //     "%-5s %-5s %-5s %-5d %f\n",
+    //     info.maSV,
+    //     info.hoDem,
+    //     info.tenSV,
+    //     info.namSinh,
+    //     info.diemKQ
+    //     );
+    if( this == NULL){
+        return;
+    }
+    cout << "Ma SV: " << info.maSV << endl
+        << "Ho dem: " << info.hoDem << endl
+        << "Ten SV: " << info.tenSV << endl
+        << "Nam sinh: " << info.namSinh << endl
+        << "Diem KQ: " << info.diemKQ << endl
+        << "==============\n"
+        ;
+}
+void SList::addTail(Node* p) {
 	if (pHead == NULL) {
 		pHead = p;
 		pTail = p;
@@ -22,33 +65,31 @@ void SList::printList(){
     }
 }
 void SList::getFile(char* _filename){
-    FILE *f = fopen(_filename, "r");
-    if( f == NULL){
-        printf("File not found\n");
-        return;
-    }
-    Data song;
+    ifstream F("students.txt");
+    // FILE *f = fopen(_filename, "r");
+    // if( f == NULL){
+    //     printf("File not found\n");
+    //     return;
+    // }
     int n = 0;
-    fscanf(f, "%d\n", &n);
+    F >> n;
     for(;n>0; n--){
-        fscanf(f, "%[^#] %*c %[^#] %*c %[^#] %*c %d\n", song.name, song.author, song.singer, &song.time);
-        addNode(song);
+        Data student;
+        F   >> student.maSV
+            >> student.hoDem
+            >> student.tenSV
+            >> student.diemKQ
+            >> student.namSinh
+            ;
+        addNode(createNode(student));
     }
+    F.close();
 }
 
-unsigned int SList::sumTimeList(){
-    unsigned int result = 0;
-    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
-        result += tmp->info.time;
-    }
-
-    return result;
-}
-void SList::addNode(Data Info){
+void SList::addNode(Node* p){
     if(round(rand())){
-        addTail(Info);
+        addTail(p);
     }else{
-        Node* p = new Node(Info);
         p->pNext = pHead;
         pHead->pNext = p;
     }
@@ -69,47 +110,6 @@ void SList::deleteNode(Node* p){
         }
     }
 }
-bool SList::isExists(char* name){
-    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
-        if(strcmp(tmp->info.name, name) == 0){
-            return true;
-        }
-    }
-    return false;
-}
-Node* SList::findNode(char* name){
-    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
-        if(strcmp(tmp->info.name, name) == 0){
-            return tmp;
-        }
-    }
-}
-void SList::deleteSong(char* name){
-    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
-        if(strcmp(tmp->info.name, name) == 0){
-            deleteNode(tmp);
-            break;
-        }
-    }
-}
-void SList::sortByName(){
-    for(Node* x = pHead; x->pNext != NULL; x = x->pNext){
-        for(Node* y = pHead; y != NULL; y = y->pNext){
-            if(x->info.name[0] > y->info.name[0]){
-                std::swap(x->info, y->info);
-            }
-        }
-    }
-}
-void SList::sortBySinger(){
-    for(Node* x = pHead; x->pNext != NULL; x = x->pNext){
-        for(Node* y = pHead; y != NULL; y = y->pNext){
-            if(x->info.singer[0] > y->info.singer[0]){
-                std::swap(x->info, y->info);
-            }
-        }
-    }
-}
 
 void SList::setNodeToHead(Node* p){
     for(Node* x = pHead; x->pNext != NULL; x = x->pNext){
@@ -120,71 +120,255 @@ void SList::setNodeToHead(Node* p){
         }
     }
 }
-
-Data getInputSong(){
-    Data song;
-    printf("Nhap ten bai hat: ");
-    scanf("%s", song.name);
-    printf("Nhap ten tac gia: ");
-    scanf("%s", song.author);
-    printf("Nhap ten ca sy: ");
-    scanf("%s", song.singer);
-    printf("Nhap thoi gain HAT: ");
-    scanf("%d", &song.time);
-    return song;
+//=================================================
+Node* SList::findStudentById(Data* info){
+    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+        if(strcmp(tmp->info.maSV, info->maSV) == 0){
+            return tmp;
+        }
+    }
+    printf("Student not found\n");
+    return NULL;
+}
+Node* SList::findStudentByName(Data* info){
+    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+        if(strcmp(tmp->info.tenSV, info->tenSV) == 0){
+            return tmp;
+        }
+    }
+    // printf("Student not found\n");
+    return NULL;
+}
+void SList::sortBy(char *type){
+    short int b_type = strcmp(type, "id") == 0 
+                        ? 1 : 
+                        strcmp(type, "name") == 0
+                        ? 2 : 
+                        strcmp(type, "score") == 0
+                        ? 3 :
+                        0
+                        
+                        ;
+    if(b_type == 0) return;
+    for(Node* x = pHead; x != NULL; x = x->pNext){
+        for(Node* y = x->pNext; y != NULL; y = y->pNext){
+            switch (b_type)
+            {
+            case 1://Id
+                cout << y->info.maSV << " < " << x->info.maSV;
+                if(atoi(y->info.maSV) < atoi(x->info.maSV)){
+                    cout << "YES";
+                    swap(y->info, x->info);
+                }
+                cout << endl;
+                break;
+            case 2://Name
+                if(y->info.tenSV < x->info.tenSV){
+                    swap(y->info, x->info);
+                }
+                break;
+            case 3:
+                if(y->info.diemKQ > x->info.diemKQ){
+                    swap(y->info, x->info);
+                }
+                break;
+            }
+        }
+    }
+}
+void SList::addNodeXAfterNodeY(Node* x, Node* y){
+	if (pHead == y) {
+		addNode(x);
+		return;
+	}
+	for (Node* tmp = pHead; tmp->pNext != NULL; tmp = tmp->pNext) {
+		if (tmp->pNext == y) {
+			x->pNext = tmp->pNext;
+			tmp->pNext = x;
+			return;
+		}
+	}
+}
+void SList::addStudent(Node* p){
+    if(pHead == NULL){
+        pHead = p;
+        pTail = p;
+        return;
+    }
+    if(pHead->info.maSV > p->info.maSV){
+        p->pNext = pHead;
+        pHead = p;
+        return;
+    }
+    if(pTail->info.maSV < p->info.maSV){
+        pTail->pNext = p;
+        pTail = p;
+        return;
+    }
+    for(Node* tmp = pHead; tmp->pNext != NULL; tmp = tmp->pNext){
+        if(p->info.maSV < tmp->pNext->info.maSV){
+            addNodeXAfterNodeY(p, tmp);
+        }
+    }
+}
+void SList::deleteStudent(Node* p){
+    if(pHead == p){
+        pHead = p->pNext;
+        delete p;
+        return;
+    }
+    for(Node* tmp = pHead; tmp->pNext != NULL; tmp = tmp->pNext){
+        if(tmp->pNext == p){
+            tmp->pNext = p->pNext;
+            delete p;
+        }
+    }
+}
+SList* SList::createNewListDESCByScore(){
+    SList *sl = new SList();
+    for(Node* tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+        sl->addTail(createNode(tmp->info));
+    }
+    sl->sortBy((char*)"score");
+    return sl;
+}
+void SList::printStudents(){
+    for(Node*  tmp = pHead; tmp != NULL; tmp = tmp->pNext){
+        if(tmp->info.type() == 2){
+            tmp->showNode();
+        }
+    }
+}
+Node* SList::maxScoreStudent(){
+    Node* maxScore = pHead;
+    for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
+        if(maxScore->info.diemKQ < tmp->info.diemKQ){
+            maxScore = tmp;
+        }
+    }
+    return maxScore;
+}
+Node* SList::minScoreStudent(){
+    Node* minScore = pHead;
+    for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
+        if(minScore->info.diemKQ > tmp->info.diemKQ){
+            minScore = tmp;
+        }
+    }
+    return minScore;
+}
+Node* SList::minScoreGoodStudent(){
+    Node* minScore = new Node();
+    bool flag = false;
+    for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
+        if(flag == false && tmp->info.type() == 3){
+            delete minScore;
+            minScore = tmp;
+            flag = true;
+            continue;
+        }
+        if( flag == true && 
+            minScore->info.diemKQ > tmp->info.diemKQ &&
+            minScore->info.type() == 3
+        ){
+            minScore = tmp;
+        }
+    }
+    return minScore;
+}
+Node* SList::findStudentAroundScore(float x){
+    float minCarry = abs(x - pHead->info.diemKQ);
+    Node* carry = pHead;
+    for(Node* tmp = pHead->pNext; tmp != NULL; tmp = tmp->pNext){
+        if(abs(x - carry->info.diemKQ) < abs(x - tmp->info.diemKQ)){
+            carry = tmp;
+        }
+    }
+    return carry;
 }
 
+void SList::deleteAllStudentsByName(Data* Info){
+    Node* tmp = this->findStudentByName(Info);
+    while(tmp != NULL){
+        this->deleteStudent(tmp);
+        tmp = this->findStudentByName(Info);
+    }
+}
 void Menu();
-
+void Control(int option, SList *sl, SList *sl1){
+    Data x;
+    switch (option)
+    {
+    case 1:
+        sl->printList();
+        break;
+    case 2:
+        cout << "Nhap x:";
+        cin >> x.maSV;
+        sl->findStudentById(&x)->showNode();
+        break;
+    case 3:
+        cout << "Nhap x:";
+        cin >> x.tenSV;
+        sl->findStudentByName(&x)->showNode();
+        break;
+    case 4:
+        sl->sortBy((char*)"id");
+        break;
+    case 5:
+        sl->sortBy((char*)"name");
+        break;
+    case 6:
+        sl->getInputNode(&x);
+        Node* p = createNode(x);
+        sl->addNode(p);
+        break;
+    case 7:
+        cout << "Nhap maSV: ";
+        cin >> x.maSV;
+        sl->deleteStudent(sl->findStudentById(&x));
+        break;
+    case 8:
+        cout << "Nhap tenSV: ";
+        cin >> x.tenSV;
+        sl->deleteAllStudentsByName(&x);
+        break;
+    case 9:
+        sl1 = sl->createNewListDESCByScore();
+        sl1->printList();
+        break;
+    case 10:
+        sl->printStudents();
+        break;
+    case 11:
+        sl->maxScoreStudent()->showNode();
+        break;
+    case 12:
+        sl->minScoreStudent()->showNode();
+        break;
+    case 13:
+        sl->minScoreGoodStudent()->showNode();
+        break;
+    case 14:
+        cout << "Nhap x: ";
+        cin >> x.diemKQ;
+        sl->findStudentAroundScore(x.diemKQ)->showNode();
+        break;    
+    default:
+        cout << "Error code";
+        break;
+    }
+}
 int main(){
-    SList *sl = new SList();
-    int option = 0, x = 0;
+    SList *sl = new SList(), *sl1 = new SList();
+    int option = -1, x = 0;
     bool flag = false;
-    char filename[] = "songs.txt", song_name[100];
-    while(1){
+    char filename[] = "students.txt", song_name[100];
+    sl->getFile(filename);
+    while(option != 0){
         Menu();
-        printf("Choose option: ");
-        scanf("%d", &option);
-        switch(option){
-        case 1:
-            sl->printList();
-            break;
-        case 2:
-            if(flag == false){
-                // scanf("%s", filename);
-                sl->getFile(filename);
-                flag = true;
-            }
-            break;
-        case 3:
-            printf("Total time: %d\n", sl->sumTimeList());
-            break;
-        case 4:
-            sl->addNode(getInputSong());
-            break;
-        case 5:
-            printf("Enter a song's name: ");
-            scanf("%s", filename);
-            sl->deleteSong(filename);
-            break;
-        case 6:
-            printf("Enter a song's name: ");
-            scanf("%s", song_name);
-            printf("%d\n", sl->isExists(song_name));
-            break;
-        case 7:
-            sl->sortByName();
-            break;
-        case 8:
-            sl->sortBySinger();
-            break;
-        case 9:
-            printf("Enter a song's name: ");
-            scanf("%s", song_name);
-            sl->setNodeToHead(sl->findNode(song_name));
-        case 0:
-            return 0;
-        }
+        cin >> option;
+        Control(option, sl, sl1);
     }
 
     return 0;
@@ -192,15 +376,21 @@ int main(){
 
 void Menu(){
     printf(
-        "=============XOM BAI HAT=============\n"
+        "=============LOP TUY Y=============\n"
         "1. In danh sach\n"
-        "2. Doc danh sach nhac tu file\n"
-        "3. Thoi gian can de nghe het bai hat trong danh sach\n"
-        "4. Them mot bai hat vao dau/cuoi playlist\n"
-        "5. Xoa mot bai nhac\n"
-        "6. Tim bai nhac\n"
-        "7. Sap xep theo ten bai nhac\n"
-        "8. Sap xep theo ten ca si\n"
-        "9. Dua mot bai hat len dau\n"
+        "2. Cho biet ho ten va diem ket qua hoc tap cua sinh vien co ma so la x\n"
+        "3. Cho biet cac thong tin ve sinh vien co ten la x\n"
+        "4. Sap xep DSSV theo chieu tang dan theo MaSV\n"
+        "5. Sap xep DSSV theo chieu tang dan cua ten sinh vien\n"
+        "6. Them mot sinh vien sao cho van ggiu nguyen thu tu tang dan cua ma so sinh vien\n"
+        "7. Xoa sinh vien co MaSV=x\n"
+        "8. xoa tat ca cac sinh vien co ten la x\n"
+        "9. Tao danh sach moi tu danh sach da cho sao cho danh sach moi giam dan theo diem ket qua hoc tap\n"
+        "10. In danh sach cac sinh vien duoc xep loai kha\n"
+        "11. Cho biet sinh vien co diem ket qua hoc tap cao nhat\n"
+        "12. Cho biet sinh vien co diem ket qua hoc tap thap nhat\n"
+        "13. Cho biet sinh vien co diem ket qua hoc tap thap nhat trong so cac sinh vien xep loai gioi\n"
+        "14. Cho biet sinh vien co diem ket qua hoc tap gan x nhat\n"
+        "=======\n"
         );
 }

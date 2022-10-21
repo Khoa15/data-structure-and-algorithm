@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 {
     "files.associations": {
         "istream": "cpp"
     }
+=======
+{
+    "files.associations": {
+        "istream": "cpp"
+    }
+>>>>>>> 5854172727e5b18115b37e978688197f95627cef
 }
