@@ -8,6 +8,20 @@ struct Student{
     char tenSV[41];
     short int namSinh;
     float diemKQ;
+
+    short int type(){
+        if(diemKQ >= 8.5){
+            // std::cout << "GIOI";
+            return 3;
+        }else if(diemKQ >= 7 && diemKQ < 8.5){
+            // std::cout << "KHA";
+            return 2;
+        }else if(diemKQ >= 5){
+            // std::cout << "TRUNG BINH";
+            return 1;
+        }
+        return 0;
+    }
 };
 
 struct Subject{
@@ -27,7 +41,7 @@ public:
     Node(Data x) : info(x), pNext(NULL) {}
     Node(Data x, Node* next) : info(x), pNext(next) {}
     void showNode();
-    void getInput();
+    Node* createNode(Data Info);
 };
 
 class SList {
@@ -38,29 +52,28 @@ public:
     SList(Node* p) : pHead(p), pTail(p) {}
     ~SList() { delete[] pHead; delete pTail; }
 
+    void getInputNode(Data* info);
     void addTail(Node* x);
     void printList();
     void addNodeXAfterNodeY(Node* x, Node* y);
     //1
     void getFile(char* _filename);
     void deleteNode(Node* p);
-    void deleteSong(char* name);
-    unsigned int sumTimeList();
-    void addNode(Data x);
-    bool isExists(char* name);
-    Node* findNode(char* name);
-    void sortByName();
-    void sortBySinger();
+    void addNode(Node* x);
     void setNodeToHead(Node* p);
 
-    Node* findStudent(char *Id);//a, b
-    void sortBy(char *type = "id");//c, d
+    Node* findStudentById(Data* Info);//a, b
+    Node* findStudentByName(Data* Info);//a, b
+    void sortBy(char *type);//c, d
     void addStudent(Node* x);
     void deleteStudent(Node* p);
     SList* createNewListDESCByScore();
     void printStudents();
-    void maxScore();
-    void minScore();
+    Node* maxScoreStudent();
+    Node* minScoreStudent();
+    Node* minScoreGoodStudent();
+    Node* findStudentAroundScore(float x);//m
+    void deleteAllStudentsByName(Data* info);
 };
 
 #endif
