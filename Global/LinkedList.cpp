@@ -101,3 +101,15 @@ bool SList<T>::deleteNode(Node<T>* p){
     delete p;
     return true;
 }
+
+template <typename T>
+void SList<T>::cleanList(){
+    Node<T> *tmp = getHead();
+    while(tmp != NULL){
+        Node<T> *next = tmp->getNext();
+        delete tmp;
+        tmp = next;
+    }
+    setHead(NULL);
+    setTail(NULL);
+}

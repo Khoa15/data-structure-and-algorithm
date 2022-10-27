@@ -2,10 +2,12 @@
 
 template <typename T>
 int Stack<T>::getSize(){
-    
+    return sizeStack;
 }
 template <typename T>
-void setSize();
+void setSize(int sizeStack){
+    sizeStack = sizeStack;
+}
 
 template <typename T>
 int Stack<T>::size(){
@@ -21,12 +23,12 @@ void Stack<T>::push(Node<T>* p){
 
 template <typename T>
 void Stack<T>::pop(){
-    if(deleteNode(getHead())){
+    if(deleteNode(SList<T>::getHead())){
         sizeStack -= 1;
     }
 }
 
 template <typename T>
 Node<T>* Stack<T>::top(){
-    return getHead();
+    return SList<T>::getHead();
 }
