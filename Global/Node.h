@@ -2,19 +2,22 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 #include <iostream>
-using namspace std;
-typedef int Data;
+using namespace std;
+// typedef int Data;
+
+template <typename T>
 class Node{
 private:
-    Data Info;
-    Node* pNext;
+    T Info;
+    Node<T>* pNext;
 public:
-    Node() : pNext(NULL) {}
+    Node() : Info(0), pNext(NULL) {}
+    Node(T inf) : Info(inf), pNext(NULL) {}
 
-    Data getInfo();
-    Node* getNext();
+    T getInfo();
+    Node<T>* getNext();
 
-    void setInfo(Data Info);
-    void setNext(Node* p);
+    void setInfo(T Info);
+    void setNext(Node<T>* p);
 };
 #endif
