@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "*.tcc": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "istream": "cpp",
+        "streambuf": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "random": "cpp",
+        "fstream": "cpp",
+        "span": "cpp",
+        "regex": "cpp"
+    }
+}
