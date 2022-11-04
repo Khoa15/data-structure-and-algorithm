@@ -23,9 +23,14 @@ public:
     void setNext(Node<T>* p);
     void setPrev(Node<T>* p);
 
-    void showInfo(T Info){
+    void showInfo(){
         cout << Info << "\t";
     }
+
+
+    bool isLeaf();
+    bool deleteTNodeLeft();
+    bool deleteTNodeRight();
 };
 template <typename T>
 Node<T>* createNode(T x){
@@ -67,5 +72,26 @@ void Node<T>::setInfo(T Info){
 template <typename T>
 void Node<T>::setNext(Node* p){
     pNext = p;
+}
+
+template <class T>
+bool Node<T>::isLeaf(){
+    return (this->getNext() == NULL && this->getPrev() == NULL);
+}
+
+template <class T>
+bool Node<T>::deleteTNodeLeft(){
+    if(this == NULL || isLeaf(this->getPrev()) == false) return false;
+    delete this->getPrev();
+    this->setPrev(NULL);
+    return true;
+}
+
+template <class T>
+bool Node<T>::deleteTNodeRight(){
+    if(this == NULL || isLeaf(this->getNext()) == false) return false;
+    delete this->getNext();
+    this->setNext(NULL);
+    return true;
 }
 #endif
