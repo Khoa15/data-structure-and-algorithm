@@ -13,7 +13,9 @@ private:
 public:
     Tree() : Root(NULL), height(0) {}
     Tree(Node<T> *root) : Root(root), height(0) {}
-
+    ~Tree(){
+        cout << "End";
+    }
     Node<T> *getRoot();
 
     void init(Node<T> *Root);
@@ -22,16 +24,17 @@ public:
     
     int countTNode(Node<T> *p = getRoot());
     int countTNodeIsLeaf(Node<T> *p = getRoot());
+    int countTNodeHaveOneChild(Node<T> *p = getRoot());
     int countTNodeHaveTwoChild(Node<T> *p = getRoot());
     int sumTNode(Node<T> *p = getRoot());
     int getHeight(Node<T> *p = getRoot());
 
-    void traverseNLR(Node<T> *p = getRoot());
-    void traverseLNR(Node<T> *p = getRoot());
-    void traverseLRN(Node<T> *p = getRoot());
-    void traverseNRL(Node<T> *p = getRoot());
-    void traverseRNL(Node<T> *p = getRoot());
-    void traverseRLN(Node<T> *p = getRoot());
+    void traverseNLR(Node<T> *p);
+    void traverseLNR(Node<T> *p);
+    void traverseLRN(Node<T> *p);
+    void traverseNRL(Node<T> *p);
+    void traverseRNL(Node<T> *p);
+    void traverseRLN(Node<T> *p);
 
     void listNodeLargerThanX(Node<T> *p, T x);
 
@@ -81,11 +84,12 @@ bool Tree<T>::insertTNode(Node<T> *p){
             tmp = tmp->getPrev();
         }
     }
+    return true;
 }
 
 template <class T>
 int Tree<T>::countTNode(Node<T> *p){
-    if(Root == NULL) return 0;
+    if(p == NULL) return 0;
     int nl = countTNode(p->getPrev());
     int nr = countTNode(p->getNext());
     return 1 + nl + nr;
@@ -93,11 +97,20 @@ int Tree<T>::countTNode(Node<T> *p){
 
 template <class T>
 int Tree<T>::countTNodeIsLeaf(Node<T> *p){
-    if(p == NULL) return 0;
+    if(p == NULL || (p->getNext() != NULL || p->getPrev() != NULL)) return 0;
     int countLeafLeft = countTNodeIsLeaf(p->getPrev());
     int countLeafRight = countTNodeIsLeaf(p->getNext());
-    return countLeafLeft + countLeafRight;
+    return countLeafLeft + countLeafRight + 1;
 }
+
+template <class T>
+int Tree<T>::countTNodeHaveOneChild(Node<T> *p){
+    if(p == NULL || (p->getNext() == NULL && p->getPrev() == NULL)) return 0;
+    int countNodeLeft = countTNodeHaveOneChild(p->getPrev());
+    int countNodeRight = countTNodeHaveOneChild(p->getNext());
+    return 1 + countNodeLeft + countNodeRight;
+}
+
 
 template <class T>
 int Tree<T>::countTNodeHaveTwoChild(Node<T> *p){
@@ -147,7 +160,7 @@ void Tree<T>::traverseLRN(Node<T> *p){
 }
 
 template <class T>
-void traverseNRL(Node<T> *p){
+void Tree<T>::traverseNRL(Node<T> *p){
     if(p == NULL) return;
     p->showInfo();
     traverseNRL(p->getNext());
@@ -155,7 +168,7 @@ void traverseNRL(Node<T> *p){
 }
 
 template <class T>
-void traverseRNL(Node<T> *p = getRoot()){
+void Tree<T>::traverseRNL(Node<T> *p){
     if(p == NULL) return;
     traverseRNL(p->getNext());
     p->showInfo();
@@ -163,7 +176,7 @@ void traverseRNL(Node<T> *p = getRoot()){
 }
 
 template <class T>
-void traverseRLN(Node<T> *p = getRoot()){
+void Tree<T>::traverseRLN(Node<T> *p){
     if(p == NULL) return;
     traverseRLN(p->getNext());
     traverseRLN(p->getPrev());
@@ -174,8 +187,8 @@ template <class T>
 void Tree<T>::listNodeLargerThanX(Node<T> *p, T x){
     if(p == NULL) return;
     if(p->getInfo() > x) p->showInfo();
-    listNodeLargerThanX(p->getNext());
-    listNodeLargerThanX(p->getPrev());
+    listNodeLargerThanX(p->getNext(), x);
+    listNodeLargerThanX(p->getPrev(), x);
 }
 
 template <class T>

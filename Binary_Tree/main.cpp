@@ -40,6 +40,7 @@ int main(){
     while(1){
         Menu(option);
         cin >> option;
+        if(option == 0) break;
         switch (option)
         {
         case 1:
@@ -56,8 +57,13 @@ int main(){
 
 void Bai1(){
     char choose;
-    int n, tmp;
+    int n = 0,
+        tmp = 0,
+        x = 0,
+        y = 0;
     Tree<int> *BTree = new Tree<int>();
+    Node<int>   *NodeX = NULL,
+                *NodeY = NULL;
     while(1){
         Menu(1);
         cin.ignore();
@@ -108,78 +114,78 @@ void Bai1(){
             cout << "\n";
             break;
         case 'c':
-            int *x, *y;
             cout << "Nhap giá trị x cho nút: ";
             cin >> x;
             cout << "Nhập giá trị y của nút để thêm x vào bên trái: ";
             cin >> y;
             
-            Node<int> *NodeY = BTree->findNode(y);
+            NodeY = BTree->findNode(y);
             if(NodeY == NULL){
                 cout << "Không tìm thấy!";
                 break;
             }else{
-                Node<int> *NodeX = createNode(x);
-                if(NodeY->getPrev()->getInfo() < x){
-                    NodeX->setNext(NodeY->getPrev());
-                }else{
-                    NodeX->setPrev(NodeY->getPrev());
+                NodeX = createNode(x);
+                if(NodeY->getPrev() != NULL){
+                    if(NodeY->getPrev()->getInfo() < x){
+                        NodeX->setNext(NodeY->getPrev());
+                    }else{
+                        NodeX->setPrev(NodeY->getPrev());
+                    }
                 }
+                NodeY->setPrev(NodeX);
             }
-
-            delete x, y;
             break;
         case 'd':
-            int *x, *y;
             cout << "Nhap giá trị x cho nút: ";
             cin >> x;
             cout << "Nhập giá trị y của nút để thêm x vào bên phải: ";
             cin >> y;
             
-            Node<int> *NodeY = BTree->findNode(y);
+            NodeY = BTree->findNode(y);
             if(NodeY == NULL){
                 cout << "Không tìm thấy!";
             }else{
-                Node<int> *NodeX = createNode(x);
-                if(NodeY->getNext()->getInfo() < x){
-                    NodeX->setNext(NodeY->getNext());
-                }else{
-                    NodeX->setPrev(NodeY->getNext());
+                NodeX = createNode(x);
+                if(NodeY->getNext() != NULL){
+                    if(NodeY->getNext()->getInfo() < x){
+                        NodeX->setNext(NodeY->getNext());
+                    }else{
+                        NodeX->setPrev(NodeY->getNext());
+                    }
                 }
+                NodeY->setNext(NodeX);
             }
-
-            delete x, y;            
             break;
         case 'e':
-            cout << "Số nút trên cây: " << BTree->countTNode();
+            cout << "Số nút trên cây: " << BTree->countTNode(BTree->getRoot()) << endl;
             break;
         case 'f':
-            int *x;
             cout << "Nhập x để kiểm tra tồn tại: ";
             cin >> x;
-            BTree->findNode(x);
-            delete x;
+            if(BTree->findNode(x) != NULL){
+                cout << "Có tồn tại" << endl;
+            }else{
+                cout << "Không tồn tại" << endl;
+            }
             break;
         case 'g':
-            int *x;
             cout << "Nhập x để liệt kê các nút có giá trị lớn hơn: ";
             cin >> x;
-            BTree->listNodeLargerThanX(x);
-            delete x;
+            BTree->listNodeLargerThanX(BTree->getRoot(), x);
+            cout << endl;
             break;
         case 'h':
             cout << "Số nút trên cây: "
-                << 0
+                << BTree->countTNode(BTree->getRoot())
                 << "\nSố nút lá: "
-                << 0
+                << BTree->countTNodeIsLeaf(BTree->getRoot())
                 << "\nSố nút có 1 con: "
-                << 0
+                << BTree->countTNodeHaveOneChild(BTree->getRoot())
                 << "\nSố nút có 2 con: "
-                << 0
-                << "\nTổng số nút lá: "
-                << 0
+                << BTree->countTNodeHaveTwoChild(BTree->getRoot())
                 << "\nChiều cao: "
-                << BTree->getHeight(BTree->getRoot());
+                << BTree->getHeight(BTree->getRoot())
+                << endl;
             break;
         default:
             break;
