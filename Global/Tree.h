@@ -31,6 +31,8 @@ public:
     void traverseLRN(TNode<T> *p = getRoot());
 
     TNode<T> *findTNode(T x);
+    TNode<T> *findTNodeMax(TNode<T> *Root);
+    TNode<T> *findTNodeMaxSec(TNode<T> *Root);
 };
 
 template <class T>
@@ -139,5 +141,33 @@ TNode<T> *Tree<T>::findTNode(T x){
         else tmp = tmp->getPrev();
     }
     return tmp;
+}
+
+template <class T>
+TNode<T> *findTNodeMax(TNode<T> *Root){
+    if (Root->getPrev() == NULL && Root->getNext() == NULL) return Root;
+	if (Root->getNext() != NULL) {
+		return max(Root->getNext());
+	}
+
+	return Root;
+}
+
+template <class T>
+TNode<T> *Tree<T>::findTNodeMaxSec(TNode<T> *Root){
+	if (Root == NULL) return 0;
+	if (Root->getNext() == NULL) {
+		return max(Root->getPrev());
+	}
+
+	if (Root->getNext()->getNext() == NULL && Root->getNext()->getPrev() == NULL) {
+		return Root->getInfo();
+	}
+	if (Root->getNext()->getPrev() != NULL && Root->getNext()->getNext() == NULL) {
+		return max2(Root->getNext());
+	}
+	if (Root->getNext()->getPrev() == NULL && Root->getNext()->getNext() != NULL) {
+		return max2(Root->getNext());
+	}
 }
 #endif
