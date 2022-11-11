@@ -4,7 +4,6 @@
 #include "TNode.h"
 #include "Queue.h"
 #include "Stack.h"
-#include "Number.h"
 #include <stdlib.h>
 
 template <class T>
@@ -22,9 +21,6 @@ public:
     TNode<T> *getRoot();
 
     void init(TNode<T> *root = Root);
-    void createBTreeFromKeyboard();
-    void createRandomBTree();
-
     bool isEmpty();
     bool insertTNode(TNode<T> *root = Root);
     bool deleteTNode(T x, TNode<T> *root = Root);
@@ -72,30 +68,6 @@ TNode<T> *BTree<T>::getRoot(){
 template <class T>
 void BTree<T>::init(TNode<T> *root){
     Root = root;
-}
-
-template <class T>
-void BTree<T>::createBTreeFromKeyboard(){
-    int n;
-    do{
-        cout << "Nhập n số phần tử của cây(n > 0): ";
-        cin >> n;
-    }while(n <= 0);
-
-    int x;
-    for(int i = 0; i < n; i++){
-        cin >> x;
-        this->createTNode(createNode(x));
-    }
-}
-
-template <class T>
-void BTree<T>::createRandomBTree(){
-    int n = random() % 20 + 10;
-
-    for(int i = 0; i < n; i++){
-
-    }
 }
 
 template <class T>

@@ -10,6 +10,7 @@ public:
     bool isLeaf();
     bool deleteTNodeLeft();
     bool deleteTNodeRight();
+    TNode<T> *createTNode(T info);
 };
 
 template <class T>
@@ -34,7 +35,7 @@ bool TNode<T>::deleteTNodeRight(){
 }
 
 template <class T>
-TNode<T> *createTNode(T info){
+TNode<T> *TNode<T>::createTNode(T info){
     TNode<T> *p = new TNode<T>(info);
     if(p == NULL){
         cout << "Your memory is not enough\n";
