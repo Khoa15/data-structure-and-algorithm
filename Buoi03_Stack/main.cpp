@@ -59,13 +59,16 @@ void Bai2(){
             Stack2->showList();
             cout << endl;
     }
+    Stack1->cleanList();
+    Stack2->cleanList();
 }
-
-int main(){
+void Bai3(){
     Stack<char> stk;
     string n;
+    bool flag = true;
     cin >> n;
     for(int i = 0; i < n.length(); i++){
+        if(n[i] == ' ') continue;
         //(), {}, []
         if((n[i] == '}' || n[i] == ')' || n[i] == ']') && stk.isEmpty() == true){
             cout << "Sai\n";
@@ -79,12 +82,30 @@ int main(){
             ||
             (n[i] == ')' && stk.top()->getInfo() != '(')
             )){
-                cout << "Sai\n";
+                flag = false;
                 break;
             }else{
+                if(
+                (n[i] == '}' && stk.top()->getInfo() == '{')
+                ||
+                (n[i] == ']' && stk.top()->getInfo() == '[')
+                ||
+                (n[i] == ')' && stk.top()->getInfo() == '(')
+                ){
+                    stk.pop();
+                    continue;
+                }
                 stk.push(createNode(n[i]));
             }
-
     }
+    if(flag == true){
+        cout << "Đúng\n";
+    }else{
+        cout << "Sai\n";
+    }
+    stk.cleanList();
+}
+int main(){
+    
     return 0;
 }
