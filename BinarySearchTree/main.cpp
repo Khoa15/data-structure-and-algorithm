@@ -65,6 +65,8 @@ int main(){
 
 void Bai1(){
     char option;
+    BTree<int> bTree;
+    bTree.init(NULL);
     while(1){
         Menu(1);
         cin.ignore();
@@ -74,7 +76,9 @@ void Bai1(){
         case '0':
             return;
             break;
-        
+        case '1':
+
+            return;
         default:
             break;
         }

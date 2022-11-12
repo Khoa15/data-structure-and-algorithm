@@ -4,6 +4,7 @@
 #include "TNode.h"
 #include "Queue.h"
 #include "Stack.h"
+#include "Number.h"
 #include <stdlib.h>
 
 template <class T>
@@ -21,6 +22,9 @@ public:
     TNode<T> *getRoot();
 
     void init(TNode<T> *root = Root);
+    void createBTreeFromKeyboard();
+    bool createRandomBTree();
+
     bool isEmpty();
     bool insertTNode(TNode<T> *root = Root);
     bool deleteTNode(T x, TNode<T> *root = Root);
@@ -34,6 +38,9 @@ public:
     int countTNodeOfLevelK(int k, TNode<T> *root = Root);
 
     void showTNodeIsLeafOfLevelK(int k, TNode<T> *root = Root);
+
+    void rotateRight();
+    void rotateLeft();
 
     void traverseNLR(TNode<T> *root = Root);
     void traverseLNR(TNode<T> *root = Root);
@@ -68,6 +75,35 @@ TNode<T> *BTree<T>::getRoot(){
 template <class T>
 void BTree<T>::init(TNode<T> *root){
     Root = root;
+}
+
+template <class T>
+void BTree<T>::createBTreeFromKeyboard(){
+    int n = 0;
+    do{
+        cout << "Nhập n số phần tử của cây(n > 0): ";
+        cin >> n;
+    }while(n <= 0);
+
+    int x = 0;
+    for(int i = 0; i < n; i++){
+        cin >> x;
+        if(this->createTNode(createNode(x)) == NULL){
+            return;
+        }
+    }
+}
+
+template <class T>
+bool BTree<T>::createRandomBTree(){
+    int n = random;
+    for(int i = 0; i < n; i++){
+        if(this->createTNode(createNode(random(1, 99))) == NULL){
+            this->deleteTree();
+            return false;
+        }
+    }
+    return true;
 }
 
 template <class T>

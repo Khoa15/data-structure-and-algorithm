@@ -23,9 +23,10 @@ public:
 
     void init(TNode<T> *root = Root);
     void createBTreeFromKeyboard();
-    void createRandomBTree();
+    bool createRandomBTree();
 
     bool isEmpty();
+    bool isBinarySearchTree(TNode<T> *root = Root);
     bool insertTNode(TNode<T> *root = Root);
     bool deleteTNode(T x, TNode<T> *root = Root);
     bool createBSTreeNumberFromFile(char filename[]);
@@ -39,6 +40,9 @@ public:
 
     void showTNodeIsLeafOfLevelK(int k, TNode<T> *root = Root);
 
+    void rotateRight();
+    void rotateLeft();
+
     void traverseNLR(TNode<T> *root = Root);
     void traverseLNR(TNode<T> *root = Root);
     void traverseLRN(TNode<T> *root = Root);
@@ -49,8 +53,8 @@ public:
     void traverseBreadthNLR(TNode<T> *root = Root);
     void traverseDepthNLR(TNode<T> *root = Root);
 
-
-    TNode<T> *findTNode(T x);
+    TNode<T> *findRootOfTwoTNode(TNode<T> *TNode1, TNode<T> *TNode2);
+    TNode<T> *findTNode(T x, TNode<T> *root = Root);
     TNode<T> *findTNodeMinDistanceX(T x);
     TNode<T> *findTNodeMaxDistanceX(T x);
 
@@ -76,32 +80,51 @@ void BTree<T>::init(TNode<T> *root){
 
 template <class T>
 void BTree<T>::createBTreeFromKeyboard(){
-    int n;
+    int n = 0;
     do{
         cout << "Nhập n số phần tử của cây(n > 0): ";
         cin >> n;
     }while(n <= 0);
 
-    int x;
+    int x = 0;
     for(int i = 0; i < n; i++){
         cin >> x;
-        this->createTNode(createNode(x));
+        if(this->createTNode(createNode(x)) == NULL){
+            return;
+        }
     }
 }
 
 template <class T>
-void BTree<T>::createRandomBTree(){
-    int n = random() % 20 + 10;
-
+bool BTree<T>::createRandomBTree(){
+    int n = random;
     for(int i = 0; i < n; i++){
-
+        if(this->createTNode(createNode(random(1, 99))) == NULL){
+            this->deleteTree();
+            return false;
+        }
     }
+    return true;
 }
 
 template <class T>
 bool BTree<T>::isEmpty(){
     return (Root == NULL);
 }
+
+template <class T>
+bool BTree<T>::isBinarySearchTree(TNode<T> *root){
+    if(getRoot() == NULL) return false;
+    if(root == NULL) return true;
+    if(
+        root->getPrev() != NULL && root->getPrev()->getInfo() > root->getInfo()
+        ||
+        root->getNext() != NULL && root->getNext()->getInfo() < root->getInfo()
+    ) return false;
+    isBinarySearchTree(root->getPrev());
+    isBinarySearchTree(root->getNext());
+}
+
 
 template <class T>
 bool BTree<T>::insertTNode(TNode<T> *root){
@@ -305,12 +328,27 @@ void BTree<T>::traverseDepthNLR(TNode<T> *root){
     }
 }
 
+template <class T>
+TNode<T> *BTree<T>::findRootOfTwoTNode(TNode<T> *TNode1, TNode<T> *TNode2){
+    if(TNode1 == NULL || TNode2 == NULL) return NULL;
+    // findTNode()
+    TNode<T>    *tmp = getRoot(),
+                *tmp2 = getRoot();
+    while(tmp != NULL){
+        TNode<T> *Left = findTNode(TNode1->getInfo(), tmp->getPrev()),
+                *Right = findTNode(TNode2->getInfo(), tmp->getNext());
+        if(Left == Right) return tmp;
+    }
+
+    return tmp;
+}
+
 
 template <class T>
-TNode<T> *BTree<T>::findTNode(T x){
-    if(getRoot() == NULL) return NULL;
-    if(getRoot()->getInfo() == x) return getRoot();
-    TNode<T> *tmp = Root;
+TNode<T> *BTree<T>::findTNode(T x, TNode<T> *root){
+    if(root == NULL) return NULL;
+    if(root->getInfo() == x) return root;
+    TNode<T> *tmp = root;
     while(tmp != NULL){
         if(tmp->getInfo() == x) return tmp;
         if(tmp->getInfo() < x) tmp = tmp->getNext();
