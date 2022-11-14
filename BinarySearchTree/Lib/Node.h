@@ -23,7 +23,7 @@ public:
     void setNext(Node<T>* p);
     void setPrev(Node<T>* p);
 
-    void showInfo(T Info){
+    void showInfo(){
         cout << Info << "\t";
     }
 };

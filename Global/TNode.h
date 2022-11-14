@@ -7,6 +7,9 @@ template <class T>
 class TNode : public Node<T>
 {
 public:
+    TNode<T> *getNext();
+    TNode<T> *getPrev();
+
     bool isLeaf();
     bool deleteTNodeLeft();
     bool deleteTNodeRight();
