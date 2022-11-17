@@ -3,38 +3,12 @@
 #define _INT_NUMBER_H_
 #include <stdlib.h>
 #include <math.h>
-int random(int mi, int ma);
-int gcd(int a, int b);
 
-class IntNumber{
-private:
-    int n;
-public:
-    IntNumber() : n(0) {}
-    IntNumber(int x) : n(x) {}
-
-    int value();
-    bool input();
-    int length();
-    int generate(int min, int max);
-    bool isPrime();
-    bool isSquare();
-    bool isPerfect();
-    bool isAbundant();// tổng các ước số không tính bản thân > chính nó
-    bool isOdd();
-    bool isEven();
-};
-
-int IntNumber::value(){
-    return n;
+int random(int mi, int ma){
+    return rand() %( ma - mi + 1 )+ mi;
 }
 
-bool IntNumber::input(){
-    if(cin >> n) return true;
-    return false;
-}
-
-int IntNumber::length(){
+int length(int n){
     int i = abs(n),
         l = 0;
     while(i){
@@ -44,12 +18,11 @@ int IntNumber::length(){
     return l;
 }
 
-int IntNumber::generate(int min, int max){
-    n = random(min, max);
-    return n;
+int generate(int min, int max){
+    return random(min, max);
 }
 
-bool IntNumber::isPrime(){
+bool isPrime(int n){
     if(n < 2) return false;
     if(n == 2) return true;
     if(n % 2 == 0 || n % 3 == 0) return false;
@@ -60,12 +33,12 @@ bool IntNumber::isPrime(){
     return false;
 }
 
-bool IntNumber::isSquare(){
+bool isSquare(int n){
     if(n < 0) return false;
     return sqrt(n) * sqrt(n) == n;
 }
 
-bool IntNumber::isPerfect(){
+bool isPerfect(int n){
     if(n < 0) return false;
     int s = 0;
     for(int i = 1; i < n/2; i++){
@@ -74,7 +47,7 @@ bool IntNumber::isPerfect(){
     return s == n;
 }
 
-bool IntNumber::isAbundant(){
+bool isAbundant(int n){
     if(n < 0) return false;
     int s = 0;
     for(int i = 1; i < n/2; i++){
@@ -84,15 +57,11 @@ bool IntNumber::isAbundant(){
     return s > 0;
 }
 
-bool IntNumber::isEven(){
+bool isEven(int n){
     return abs(n) % 2 == 0;
 }
 
-bool IntNumber::isOdd(){
+bool isOdd(int n){
     return abs(n) % 2 != 0;
-}
-
-int random(int mi, int ma){
-    return rand() %( ma - mi + 1 )+ mi;
 }
 #endif

@@ -6,7 +6,6 @@
 #include <Windows.h>
 #endif
 using namespace std;
-typedef IntNumber INT_N;
 struct Fraction{
     int Numerator, Denominator;
     Fraction() : Numerator(1), Denominator(1) {}
@@ -26,38 +25,43 @@ struct Fraction{
 
 };
 
-int countValueLargerXInBTree(TNode<INT_N> *root, INT_N x){
+int countValueLargerXInBTree(Node<int> *root, int x){
     if(root != NULL) return 0;
     int countLeft = countValueLargerXInBTree(root->getPrev(), x),
         countRight = countValueLargerXInBTree(root->getNext(), x);
-    return ((root->getInfo().value() > x.value()) ? 1 : 0) + countLeft + countRight;
+    return ((root->getInfo() > x) ? 1 : 0) + countLeft + countRight;
 }
-int countValueSmallerXInBTree(TNode<INT_N> *root, INT_N x){
+
+int countValueSmallerXInBTree(Node<int> *root, int x){
     if(root != NULL) return 0;
     int countLeft = countValueSmallerXInBTree(root->getPrev(), x),
         countRight = countValueSmallerXInBTree(root->getNext(), x);
-    return ((root->getInfo().value() < x.value()) ? 1 : 0) + countLeft + countRight;
+    return ((root->getInfo() < x) ? 1 : 0) + countLeft + countRight;
 }
 
-int countValueXInRangeInBTree(TNode<INT_N> *root, IntNumber x, IntNumber y){
+int countValueXInRangeInBTree(Node<int> *root, int x, int y){
     if(root != NULL) return 0;
     int countLeft = countValueLargerXInBTree(root->getPrev(), x),
         countRight = countValueLargerXInBTree(root->getNext(), x);
-    return ((root->getInfo().value() >= x.value() && root->getInfo() <= y.value()) ? 1 : 0) + countLeft + countRight;
+    return ((root->getInfo() >= x && root->getInfo() <= y) ? 1 : 0) + countLeft + countRight;
 }
 
-int countTNodeIsPrime(TNode<INT_N> *root){
+int countTNodeIsPrime(Node<int> *root){
     if(root == NULL) return 0;
     int countLeft = countTNodeIsPrime(root->getPrev()),
         countRight = countTNodeIsPrime(root->getNext());
-    return ((root->getInfo().isPrime() == true) ? 1 : 0) + countLeft + countRight;
+    return ((isPrime(root->getInfo()) == true) ? 1 : 0) + countLeft + countRight;
 }
 
-int countTNodeIsAbundant(TNode<INT_N> *root){
+int countTNodeIsAbundant(Node<int> *root){
     if(root == NULL) return 0;
     int countLeft = countTNodeIsAbundant(root->getPrev()),
         countRight = countTNodeIsAbundant(root->getNext());
-    return ((root->getInfo().isAbundant() == true) ? 1 : 0) + countLeft + countRight;
+    return ((isAbundant(root->getInfo()) == true) ? 1 : 0) + countLeft + countRight;
+}
+
+bool getInputX(int &x){
+    cin >> x;
 }
 
 void Menu(int option){
@@ -100,7 +104,7 @@ int main(){
     #if _WIN32
     SetConsoleOutputCP(65001);
     system("cls");
-    #elif __linux__
+    #else
     system("clear");
     #endif
     int option = 1;
@@ -119,10 +123,10 @@ int main(){
 
 void Bai1(){
     char option;
-    BTree<IntNumber> bTree;
+    BTree<int> bTree;
     Node<int>   *NodeX = NULL,
                 *NodeY = NULL;
-    IntNumber X, Y;
+    int X, Y;
     bTree.init(NULL);
     while(1){
         Menu(1);
@@ -154,20 +158,20 @@ void Bai1(){
             bTree.traverseDepthNLR();
             break;
         case 'e':
-            X.input();
-            bTree.insertTNode(bTree.createTNode(X.value()));
+            getInputX(X);
+            bTree.insertTNode(createNode(X));
             break;
         case 'f':
             cout << "Tim kiem x: " << endl;
             cout << "Nhap x: ";
-            X.input();
-            bTree.findTNode(X.value())->showInfo();
+            getInputX(X);
+            bTree.findTNode(X)->showInfo();
             break;
         case 'g':
             cout << "Xoa nut" << endl;
             cout << "Nhap x: ";
-            X.input();
-            if(bTree.deleteTNode(X.value())){
+            getInputX(X);
+            if(bTree.deleteTNode(X)){
                 cout << "Successfully" << endl;
             }else{
                 cout << "Error!" << endl;
@@ -180,9 +184,9 @@ void Bai1(){
         case 'i':
             cout << "Dem so gia tri lon hon x, nho hon x, co gia tri trong doan [x, y]" << endl;
             cout << "Nhap x va y: ";
-            X.input();
-            Y.input();
-            cout << "Gia tri lon hon x: " << countValueLargerXInBTree(bTree.getRoot(), X)) 
+            getInputX(X);
+            getInputX(Y);
+            cout << "Gia tri lon hon x: " << countValueLargerXInBTree(bTree.getRoot(), X)
             << endl << "Gia tri nho hon x: " << countValueSmallerXInBTree(bTree.getRoot(), X)
             << endl << "Gia tri trong khoang [x, y]: " << countValueXInRangeInBTree(bTree.getRoot(), X, Y)
             << endl;
@@ -196,9 +200,9 @@ void Bai1(){
         case 'k':
             cout << "Xuat ra cac nut o muc k: " << endl;
             cout << "Nhap muc k: ";
-            X.input();
-            bTree.showTNodeIsLeafOfLevelK(X.value());
-            cout << "So nut chi co 1 con o muc k: " << bTree.countTNodeOfLevelK() << endl;
+            getInputX(X);
+            bTree.showTNodeIsLeafOfLevelK(X);
+            cout << "So nut chi co 1 con o muc k: " << bTree.countTNodeOfLevelK(X) << endl;
             break;
         case 'm':
             cout << "Tong gia tri nut duong: " << endl;
@@ -207,14 +211,14 @@ void Bai1(){
         case 'n':
             cout << "Tìm phần tử có giá trị gần nhất với phần tử x" << endl;
             cout << "Nhập x: ";
-            X.input();
-            bTree.findTNodeMinDistanceX(X.value());
+            getInputX(X);
+            bTree.findTNodeMinDistanceX(X);
             break;
         case 'o':
             cout << "Tìm phần tử có giá trị xa nhất với phần tử x" << endl;
             cout << "Nhập x: ";
-            X.input();
-            bTree.findTNodeMaxDistanceX(X.value());
+            getInputX(X);
+            bTree.findTNodeMaxDistanceX(X);
             break;
         case 'p':
             cout << "Đếm số nút của cây" << endl;

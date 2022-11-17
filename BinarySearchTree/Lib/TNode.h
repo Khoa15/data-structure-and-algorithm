@@ -4,7 +4,7 @@
 #include "Node.h"
 
 template <class T>
-class TNode : public Node<T>
+class TNode
 {
 public:
     bool isLeaf();
@@ -38,7 +38,7 @@ template <class T>
 TNode<T> *TNode<T>::createTNode(T info){
     TNode<T> *p = new TNode<T>(info);
     if(p == NULL){
-        cout << "Your memory is not enough\n";
+        std::cout << "Your memory is not enough\n";
     }
     return p;
 }

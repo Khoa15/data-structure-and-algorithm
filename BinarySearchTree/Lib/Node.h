@@ -2,11 +2,13 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 #include <iostream>
+#include "TNode.h"
 using namespace std;
 // typedef int Data;
 
 template <class T>
-class Node{
+class Node : public TNode<T>
+{
 private:
     T Info;
     Node<T>* pNext;
