@@ -6,21 +6,43 @@
 template <class T>
 class Queue : public SList<T>{
 private:
+    SList<T> *Head;
+    SList<T> *Tail;
     int sizeQueue;
 public:
-    Queue() : sizeQueue(0){}
-    void push(Node<T>* p);
-    // SList<T>* getList();
+    Queue() : Head(NULL), Tail(NULL), sizeQueue(0) {}
+    void setHead(SList<T> *l);
+    void setTail(SList<T> *l);
+
+    SList<T> *getHead();
+    SList<T> *getTail();
+
+    void push(SList<T>* p);
     int getSize();
     void setSize(int sizeStack);
-    void pop();
-    Node<T>* top();
+    SList<T>* pop();
+    SList<T>* top();
 };
 
-// template <typename T>
-// SList<T>* getList(){
-//     return SList<T>::getHead();
-// }
+template <class T>
+void Queue<T>::setHead(SList<T> *l){
+    Head = l;
+}
+
+template <class T>
+void Queue<T>::setTail(SList<T> *l){
+    Tail = l;
+}
+
+template <class T>
+SList<T> *Queue<T>::getHead(){
+    return Head;
+}
+
+template <class T>
+SList<T> *Queue<T>::getTail(){
+    return Tail;
+}
 
 template <typename T>
 int Queue<T>::getSize(){
@@ -33,21 +55,27 @@ void Queue<T>::setSize(int sizeQueue){
 }
 
 template <typename T>
-void Queue<T>::push(Node<T>* p){
-    if(SList<T>::insertTail(p) == true){
-        sizeQueue += 1;
+void Queue<T>::push(SList<T>* p){
+    if(p == NULL) return;
+    sizeQueue += 1;
+    if(getHead() == NULL){
+        setHead(p);
+        return;
     }
+    getTail()->setNext(p);
+    setTail(p);
 }
 
 template <typename T>
-void Queue<T>::pop(){
-    if(SList<T>::deleteNode(SList<T>::getHead()) == true){
-        sizeQueue -= 1;
-    }
+SList<T>* Queue<T>::pop(){
+    if(getHead() == NULL) return NULL;
+    SList<T> *p = getHead();
+    setHead(p->getNext());
+    return p;
 }
 
 template <typename T>
-Node<T>* Queue<T>::top(){
-    return SList<T>::getHead();
+SList<T>* Queue<T>::top(){
+    return getHead();
 }
 #endif

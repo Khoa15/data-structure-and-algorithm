@@ -15,7 +15,7 @@ public:
     void setSize(int sizeStack);
     int size();
     void push(Node<T>* p);
-    void pop();
+    Node<T>* pop();
     Node<T>* top();
 };
 
@@ -50,10 +50,13 @@ void Stack<T>::push(Node<T>* p){
 }
 
 template <typename T>
-void Stack<T>::pop(){
-    if(getList()->deleteNode(getList()->getHead())){
-        sizeStack -= 1;
-    }
+Node<T>* Stack<T>::pop(){
+    // if(getList()->deleteNode(getList()->getHead())){
+    //     sizeStack -= 1;
+    // }
+    Node<T>* p = getList()->getHead();
+    getList()->setHead(p->getNext());
+    return p;
 }
 
 template <typename T>

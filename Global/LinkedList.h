@@ -7,13 +7,15 @@ class SList{
 private:
     Node<T>* pHead;
     Node<T>* pTail;
+    SList<T> *pNext;
 public:
     SList() : pHead(NULL), pTail(NULL) {}
     SList(Node<T>* head, Node<T>* tail) : pHead(head), pTail(tail) {}
     
     Node<T>* getHead();
     Node<T>* getTail();
-
+    SList<T>* getNext();
+    void setNext(SList<T> *l);
     void setHead(Node<T>* p);
     void setTail(Node<T>* p);
 
@@ -43,6 +45,17 @@ template <typename T>
 Node<T>* SList<T>::getTail(){
     return pTail;
 }
+
+template <class T>
+SList<T>* SList<T>::getNext(){
+    return pNext;
+}
+
+template <class T>
+void SList<T>::setNext(SList<T> *l){
+    pNext = l;
+}
+    
 
 template <typename T>
 void SList<T>::setHead(Node<T>* p){

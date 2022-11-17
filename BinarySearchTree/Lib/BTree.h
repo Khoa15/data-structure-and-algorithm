@@ -1,8 +1,11 @@
 #pragma once
 #ifndef _BTree_H_
 #define _BTree_H_
-#include "Queue.h"
-#include "Stack.h"
+#include <queue>
+#include <stack>
+#include "queue.h"
+#include "stack.h"
+#include "IntNumber.h"
 #include <stdlib.h>
 
 template <class T>
@@ -15,16 +18,17 @@ public:
     BTree() : Root(NULL), height(0) {}
     BTree(Node<T> *root) : Root(root), height(0) {}
     ~BTree(){
-        deleteTree();
+        deleteTree(this->getRoot());
     }
     Node<T> *getRoot();
+    bool setRoot(Node<T> *root);
 
     void init(Node<T> *root);
-    void createBTreeFromKeyboard();
+    bool createBTreeFromKeyboard();
     bool createRandomBTree();
 
     bool isEmpty();
-    bool insertTNode(Node<T> *root);
+    bool insertTNode(Node<T> *node);
     bool deleteTNode(T x, Node<T> *root);
     bool createBSTreeNumberFromFile(char filename[]);
     
@@ -71,34 +75,48 @@ Node<T> *BTree<T>::getRoot(){
 }
 
 template <class T>
+bool BTree<T>::setRoot(Node<T> *root){
+    Root = root;
+    return true;
+}
+
+template <class T>
 void BTree<T>::init(Node<T> *root){
     Root = root;
 }
 
 template <class T>
-void BTree<T>::createBTreeFromKeyboard(){
+bool BTree<T>::createBTreeFromKeyboard(){
     int n = 0;
     do{
-        cout << "Nhập n số phần tử của cây(n > 0): ";
+        cout << "Enter n elements of tree with n larger than zero: ";
         cin >> n;
     }while(n <= 0);
-
+    cout << n << " elements of tree";
     int x = 0;
     for(int i = 0; i < n; i++){
+        cout << "Enter a number: ";
         cin >> x;
-        if(this->createTNode(createNode(x)) == NULL){
-            return;
+        if(this->insertTNode(createNode(x)) == false){
+            this->deleteTree(this->getRoot());
+            return false;
         }
     }
+    return true;
 }
 
 template <class T>
 bool BTree<T>::createRandomBTree(){
-    int n = random;
+    srand(time(NULL));
+    int n = random(5, 20);
+    bool flag = false;
     for(int i = 0; i < n; i++){
-        if(this->createTNode(createNode(random(1, 99))) == NULL){
-            this->deleteTree();
-            return false;
+        if(this->insertTNode(createNode(random(1, 99))) == false){
+            if(flag == true){
+                this->deleteTree(this->getRoot());
+                return false;
+            }
+            flag = true;
         }
     }
     return true;
@@ -110,20 +128,28 @@ bool BTree<T>::isEmpty(){
 }
 
 template <class T>
-bool BTree<T>::insertTNode(Node<T> *root){
-    if(root == NULL) return false;
-    Node<T> *tmp = root;
+bool BTree<T>::insertTNode(Node<T> *node){
+    if(node == NULL) return false;
+    Node<T> *tmp = this->getRoot();
+    if(tmp == NULL){
+        this->setRoot(node);
+        return true;
+    }
     while(1){
-        if(tmp == NULL){
-            tmp = root;
-            return true;
-        }
-        if(tmp->getInfo() == root->getInfo()){
+        if(tmp->getInfo() == node->getInfo()){
             return false;
         }
-        if(tmp->getInfo() < root->getInfo()){
+        if(tmp->getInfo() < node->getInfo()){
+            if(tmp->getNext() == NULL){
+                tmp->setNext(node);
+                return true;
+            }
             tmp = tmp->getNext();
         }else{
+            if(tmp->getPrev() == NULL){
+                tmp->setPrev(node);
+                return true;
+            }
             tmp = tmp->getPrev();
         }
     }
@@ -147,7 +173,7 @@ bool BTree<T>::deleteTNode(T x, Node<T> *root){
         root->setNext(tmp->getPrev());
         return true;
     }
-    Node<T> *tmp2 = findRootTNodeMinRight();
+    Node<T> *tmp2 = findRootTNodeMinRight(this->getRoot());
     tmp->setInfo(tmp2->getPrev()->getInfo());
     tmp2->setPrev(tmp2->getPrev()->getNext());
     return true;
@@ -156,14 +182,16 @@ bool BTree<T>::deleteTNode(T x, Node<T> *root){
 template <class T>
 bool BTree<T>::createBSTreeNumberFromFile(char filename[]){
     FILE *f;
-    f = open(filename, "rt");
+    f = fopen(filename, "rt");
     if(f == NULL) return false;
     int n;
     cin >> n;
     T x;
     for(int i = 0; i < n; i++){
         cin >> x;
-        this->createTNode(createNode(x));
+        if(this->insertTNode(createNode(x)) == false){
+            return false;
+        }
     }
     fclose(f);
     return true;
@@ -210,7 +238,7 @@ int BTree<T>::getHeight(Node<T> *root){
 }
 
 template <class T>
-int countTNodeOfLevelK(int k, Node<T> *root){
+int BTree<T>::countTNodeOfLevelK(int k, Node<T> *root){
     if(root == NULL) return 0;
     if(k == 0) return 1;
     k -= 1;
@@ -241,7 +269,7 @@ void BTree<T>::traverseLNR(Node<T> *root){
     if(root == NULL) return;
     traverseLRN(root->getPrev());
     root->showInfo();
-    traverseLRN(root->getNext()());
+    traverseLRN(root->getNext());
 }
 
 template <class T>
@@ -280,17 +308,18 @@ template <class T>
 void BTree<T>::traverseBreadthNLR(Node<T> *root){
     if(root == NULL) return;
 
-    Queue<Node<T> *> q;
+    queue<Node<T> *> q;
     q.push(root);
 
-    while(q.isEmpty() == false){
-        Node<T> *p = q.top();
+    while(q.empty() == false){
+        Node<T> *p = q.front();
         q.pop();
         p->showInfo();
 
         if(p->getPrev() != NULL){
             q.push(p->getPrev());
-        }else{
+        }
+        if(p->getNext() != NULL){
             q.push(p->getNext());
         }
     }
@@ -299,15 +328,15 @@ void BTree<T>::traverseBreadthNLR(Node<T> *root){
 template <class T>
 void BTree<T>::traverseDepthNLR(Node<T> *root){
     if(root == NULL) return;
-    Stack<Node<T> *> stk;
+    stack<Node<T> *> stk;
     stk.push(root);
-    while(stk.isEmpty() == false){
+    while(stk.empty() == false){
         Node<T> *tmp = stk.top();
         stk.pop();
         tmp->showInfo();
 
-        if(tmp->getNext() != NULL) stk.push(p->getNext());
-        if(tmp->getPrev() != NULL) stk.push(p->getPrev());
+        if(tmp->getNext() != NULL) stk.push(tmp->getNext());
+        if(tmp->getPrev() != NULL) stk.push(tmp->getPrev());
     }
 }
 
@@ -400,12 +429,13 @@ Node<T> *BTree<T>::findRootTNodeMaxLeft(Node<T> *root){
 }
 
 template <class T>
-bool deleteTree(Node<T> *root){
+bool BTree<T>::deleteTree(Node<T> *root){
     if(root == NULL) return false;
     deleteTree(root->getPrev());
     deleteTree(root->getNext());
 
     delete root;
+    return true;
 }
 
 #endif

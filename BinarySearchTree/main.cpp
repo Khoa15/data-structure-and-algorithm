@@ -1,10 +1,9 @@
+#include <conio.h>
 #include <iostream>
 #include <stdlib.h>
+#include <string>
 #include "Lib/BTree.h"
 #include "Lib/IntNumber.h"
-#ifdef _WIN32
-#include <Windows.h>
-#endif
 using namespace std;
 struct Fraction{
     int Numerator, Denominator;
@@ -62,54 +61,58 @@ int countTNodeIsAbundant(Node<int> *root){
 
 bool getInputX(int &x){
     cin >> x;
+    return true;
 }
 
 void Menu(int option){
     switch(option){
         case 0:
             cout
-                << "1. Bài 1" << endl
-                << "2. Bài 2" << endl
-                << "3. Bài 3" << endl
-                << "4. Bài 4" << endl;
+                << "1. Bai 1" << endl
+                << "2. Bai 2" << endl
+                << "3. Bai 3" << endl
+                << "4. Bai 4" << endl;
             break;
         case 1:
             cout 
-                << "===Bài 1===" << endl
-                << "a, Tạo cây" << endl
-                << "b. Duyệt cây: NLR, LNR, LRN, NRL, RNL, RLN" << endl
-                << "c. Duyệt cây theo chiều rộng NLR, NRL." << endl
-                << "d. Duyệt cây theo chiều sâu: NLR, LNR, LRN, NRL, RNL, RLN" << endl
-                << "e. Thêm 1 nút có giá trị x." << endl
-                << "f. Tìm kiếm 1 nút có giá trị x." << endl
-                << "g. Xóa nút có giá trị x." << endl
-                << "h. Xuất các phần tử theo chiều giảm dần." << endl
-                << "i. Đếm số giá trị lớn hơn x, nhỏ hơn x, có giá trị trong đoạn [x, y]." << endl
-                << "j. Tìm nút có giá trị lớn nhất, nhỏ nhất của cây." << endl
-                << "k. Xuất ra nội dung các nút, lá ở mức k/ nội dung các nút chỉ có 1 con ở mức k." << endl
-                << "l. Đếm số nút, nút lá, nút chỉ có 1 con ở mức k." << endl
-                << "m. Tính tổng giá trị các nút dương/ giá trị các nút âm." << endl
-                << "n. Tìm phần tử có khoảng cách về giá trị gần nhất với phần tử x." << endl
-                << "o. Tìm phần tử có khoảng cách về giá trị xa nhất với phần tử x." << endl
-                << "p. Đếm số nút của cây(đệ quy/ khử đệ quy)" << endl
-                << "q. Đếm số nút là số nguyên tố, là số chính phương, là số hoàn thiện, là số thịnh vượng, là số yếu của cây." << endl
-                << "r. Tính tổng giá trị các nút của cây (đệ quy/ khử đệ quy)." << endl
-                << "s. Tính tổng giá trị các nút là số nguyên tố, là số chính phương, là số hoàn thiện, là số thịnh vượng, là số yếu của cây." << endl
-                << "t. Xóa toàn bộ cây." << endl;
+                << "===Bai 1===" << endl
+                << "a. Tao cay" << endl
+                << "b. Duyet cay: NLR, LNR, LRN, NRL, RNL, RLN" << endl
+                << "c. Duyet cay theo chieu rong NLR, NRL." << endl
+                << "d. Duyet cay theo chieu sau: NLR, LNR, LRN, NRL, RNL, RLN" << endl
+                << "e. Them 1 nut co gia tri x." << endl
+                << "f. Tim kiem 1 nut co gia tri x." << endl
+                << "g. Xoa nut co gia tri x." << endl
+                << "h. Xuat cac phan tu theo chieu giam dan." << endl
+                << "i. Dem so gia tri lon hon x, nho hon x, co gia tri trong doan [x, y]." << endl
+                << "j. Tim nut co gia tri lon nhat, nho nhat cua cay." << endl
+                << "k. Xuat ra noi dung cac nut, la o muc k/ noi dung cac nut chi co 1 con o muc k." << endl
+                << "l. Dem so nut, nut la, nut chi co 1 con o muc k." << endl
+                << "m. Tinh tong gia tri cac nut duong/ gia tri cac nut am." << endl
+                << "n. Tim phan tu co khoang cach ve gia tri gan nhat voi phan tu x." << endl
+                << "o. Tim phan tu co khoang cach ve gia tri xa nhat voi phan tu x." << endl
+                << "p. Dem so nut cua cay(de quy/ khu de quy)" << endl
+                << "q. Dem so nut la so nguyen to, la so chinh phuong, la so hoan thien, la so thinh vuong, la so yeu cua cay." << endl
+                << "r. Tinh tong gia tri cac nut cua cay (de quy/ khu de quy)." << endl
+                << "s. Tinh tong gia tri cac nut la so nguyen to, la so chinh phuong, la so hoan thien, la so thinh vuong, la so yeu cua cay." << endl
+                << "t. Xoa toan bo cay." << endl;
             break;
     }
+    cout << "Choose your option: ";
 }
 void Bai1();
+void clearScreen(){
+    // #if _WIN32
+    // system("cls");
+    // #else
+    // system("clear");
+    // #endif
+}
 int main(){
-    #if _WIN32
-    SetConsoleOutputCP(65001);
-    system("cls");
-    #else
-    system("clear");
-    #endif
     int option = 1;
 
     while(option != 0){
+        clearScreen();
         Menu(option);
         switch(option){
             case 1:
@@ -127,35 +130,57 @@ void Bai1(){
     Node<int>   *NodeX = NULL,
                 *NodeY = NULL;
     int X, Y;
+    char filename[50];
     bTree.init(NULL);
     while(1){
+        clearScreen();
         Menu(1);
-        cin.ignore();
         cin >> option;
+        cin.ignore();
+        cout << "Your's option: " << option << endl;
         switch (option)
         {
         case '0':
             return;
             break;
+        case 'a':
+            cout << "1. Tu file" << endl
+                << "2. Tu ban phim" << endl
+                << "3. Random" << endl
+                << "Choose your option: ";
+            cin >> X;
+            switch(X){
+                case 1:
+                    cin.getline(filename, 50);
+                    bTree.createBSTreeNumberFromFile(filename);
+                    break;
+                case 2:
+                    bTree.createBTreeFromKeyboard();
+                    break;
+                case 3:
+                    bTree.createRandomBTree();
+                    break;
+            }
+            break;
         case 'b':
             cout << "LNR: ";
-            bTree.traverseLNR();
+            bTree.traverseLNR(bTree.getRoot());
             cout << endl << "LRN: ";
-            bTree.traverseLRN();
+            bTree.traverseLRN(bTree.getRoot());
             cout << endl << "NLR: ";
-            bTree.traverseNLR();
+            bTree.traverseNLR(bTree.getRoot());
             cout << endl << "NRL: ";
-            bTree.traverseNRL();
+            bTree.traverseNRL(bTree.getRoot());
             cout << endl << "RLN: ";
-            bTree.traverseRLN();
+            bTree.traverseRLN(bTree.getRoot());
             cout << endl << "RLN: ";
-            bTree.traverseRNL();
+            bTree.traverseRNL(bTree.getRoot());
             break;
         case 'c':
-            bTree.traverseBreadthNLR();
+            bTree.traverseBreadthNLR(bTree.getRoot());
             break;
         case 'd':
-            bTree.traverseDepthNLR();
+            bTree.traverseDepthNLR(bTree.getRoot());
             break;
         case 'e':
             getInputX(X);
@@ -171,7 +196,7 @@ void Bai1(){
             cout << "Xoa nut" << endl;
             cout << "Nhap x: ";
             getInputX(X);
-            if(bTree.deleteTNode(X)){
+            if(bTree.deleteTNode(X, bTree.getRoot())){
                 cout << "Successfully" << endl;
             }else{
                 cout << "Error!" << endl;
@@ -179,7 +204,7 @@ void Bai1(){
             break;
         case 'h':
             cout << "Xuat cac phan tu theo chieu giam dan" << endl;
-            bTree.traverseRNL();
+            bTree.traverseRNL(bTree.getRoot());
             cout << endl;
         case 'i':
             cout << "Dem so gia tri lon hon x, nho hon x, co gia tri trong doan [x, y]" << endl;
@@ -201,58 +226,62 @@ void Bai1(){
             cout << "Xuat ra cac nut o muc k: " << endl;
             cout << "Nhap muc k: ";
             getInputX(X);
-            bTree.showTNodeIsLeafOfLevelK(X);
-            cout << "So nut chi co 1 con o muc k: " << bTree.countTNodeOfLevelK(X) << endl;
+            bTree.showTNodeIsLeafOfLevelK(X, bTree.getRoot());
+            cout << "So nut chi co 1 con o muc k: " << bTree.countTNodeOfLevelK(X, bTree.getRoot()) << endl;
             break;
         case 'm':
             cout << "Tong gia tri nut duong: " << endl;
             cout << "Tong gia tri nut am: " << endl;
             break;
         case 'n':
-            cout << "Tìm phần tử có giá trị gần nhất với phần tử x" << endl;
+            cout << "Tim phan tu co gia tri gan nhat voi phan tu x" << endl;
             cout << "Nhập x: ";
             getInputX(X);
             bTree.findTNodeMinDistanceX(X);
             break;
         case 'o':
-            cout << "Tìm phần tử có giá trị xa nhất với phần tử x" << endl;
+            cout << "Tim phan tu co gia tri xa nhat voi phan tu x" << endl;
             cout << "Nhập x: ";
             getInputX(X);
             bTree.findTNodeMaxDistanceX(X);
             break;
         case 'p':
-            cout << "Đếm số nút của cây" << endl;
+            cout << "Dem so nut cua cay" << endl;
+            cout << "So nut: "; bTree.countTNode(bTree.getRoot());
+            cout << endl;
             break;
         case 'q':
-            cout << "Đếm số nút là số nguyên tố, là số chính phương, là số hoàn thiện";
-
+            cout << "Dem so nut la so nguyen to, la so chinh phuong, la so hoan thien" << endl;
+            cout << "So nguyen to: " << countTNodeIsPrime(bTree.getRoot());
+            cout << endl << "So hoan thien: " << countTNodeIsAbundant(bTree.getRoot());
             break;
         default:
 
             break;
         }
-}
+        getch();
+    }
     /*
-    << "===Bài 1===" << endl
-    << "a, Tạo cây" << endl
-    << "b. Duyệt cây: NLR, LNR, LRN, NRL, RNL, RLN" << endl
-    << "c. Duyệt cây theo chiều rộng NLR, NRL." << endl
-    << "d. Duyệt cây theo chiều sâu: NLR, LNR, LRN, NRL, RNL, RLN" << endl
-    << "e. Thêm 1 nút có giá trị x." << endl
-    << "f. Tìm kiếm 1 nút có giá trị x." << endl
-    << "g. Xóa nút có giá trị x." << endl
-    << "h. Xuất các phần tử theo chiều giảm dần." << endl
-    << "i. Đếm số giá trị lớn hơn x, nhỏ hơn x, có giá trị trong đoạn [x, y]." << endl
-    << "j. Tìm nút có giá trị lớn nhất, nhỏ nhất của cây." << endl
-    << "k. Xuất ra nội dung các nút, lá ở mức k/ nội dung các nút chỉ có 1 con ở mức k." << endl
-    << "l. Đếm số nút, nút lá, nút chỉ có 1 con ở mức k." << endl
-    << "m. Tính tổng giá trị các nút dương/ giá trị các nút âm." << endl
-    << "n. Tìm phần tử có khoảng cách về giá trị gần nhất với phần tử x." << endl
-    << "o. Tìm phần tử có khoảng cách về giá trị xa nhất với phần tử x." << endl
-    << "p. Đếm số nút của cây(đệ quy/ khử đệ quy)" << endl
-    << "q. Đếm số nút là số nguyên tố, là số chính phương, là số hoàn thiện, là số thịnh vượng, là số yếu của cây." << endl
-    << "r. Tính tổng giá trị các nút của cây (đệ quy/ khử đệ quy)." << endl
-    << "s. Tính tổng giá trị các nút là số nguyên tố, là số chính phương, là số hoàn thiện, là số thịnh vượng, là số yếu của cây." << endl
-    << "t. Xóa toàn bộ cây." << endl;
+    << "===Bai 1===" << endl
+    << "a, Tạo cay" << endl
+    << "b. Duyet cay: NLR, LNR, LRN, NRL, RNL, RLN" << endl
+    << "c. Duyet cay theo chieu rong NLR, NRL." << endl
+    << "d. Duyet cay theo chieu sau: NLR, LNR, LRN, NRL, RNL, RLN" << endl
+    << "e. Them 1 nut co gia tri x." << endl
+    << "f. Tim kiem 1 nut co gia tri x." << endl
+    << "g. Xoa nut co gia tri x." << endl
+    << "h. Xuat cac phan tu theo chieu giam dan." << endl
+    << "i. Dem so gia tri lon hon x, nho hon x, co gia tri trong doan [x, y]." << endl
+    << "j. Tim nut co gia tri lon nhat, nho nhat cua cay." << endl
+    << "k. Xuat ra noi dung cac nut, la o muc k/ noi dung cac nut chi co 1 con o muc k." << endl
+    << "l. Dem so nut, nut la, nut chi co 1 con o muc k." << endl
+    << "m. Tinh tong gia tri cac nut duong/ gia tri cac nut am." << endl
+    << "n. Tim phan tu co khoang cach ve gia tri gan nhat voi phan tu x." << endl
+    << "o. Tim phan tu co khoang cach ve gia tri xa nhat voi phan tu x." << endl
+    << "p. Dem so nut cua cay(de quy/ khu de quy)" << endl
+    << "q. Dem so nut la so nguyen to, la so chinh phuong, la so hoan thien, la so thinh vuong, la so yeu cua cay." << endl
+    << "r. Tinh tong gia tri cac nut cua cay (de quy/ khu de quy)." << endl
+    << "s. Tinh tong gia tri cac nut la so nguyen to, la so chinh phuong, la so hoan thien, la so thinh vuong, la so yeu cua cay." << endl
+    << "t. Xoa toan bo cay." << endl;
     */
 }
