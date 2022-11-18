@@ -3,13 +3,12 @@
 #define _BTree_H_
 #include <queue>
 #include <stack>
-#include "queue.h"
-#include "stack.h"
+#include "Node.h"
 #include "IntNumber.h"
 #include <stdlib.h>
 
 template <class T>
-class BTree : public Node<T>, public Queue<T>, public Stack<T>
+class BTree : public Node<T>
 {
 private:
     Node<T> *Root;
@@ -31,7 +30,10 @@ public:
     bool insertTNode(Node<T> *node);
     bool deleteTNode(T x, Node<T> *root);
     bool createBSTreeNumberFromFile(char filename[]);
-    
+
+    bool isBTree(Node<T> *root);
+    bool isAVL(Node<T> *root);
+
     int countTNode(Node<T> *root);
     int countTNodeIsLeaf(Node<T> *root);
     int countTnodeHaveTwoChild(Node<T> *root);
@@ -40,7 +42,7 @@ public:
     int countTNodeOfLevelK(int k, Node<T> *root);
 
     void showTNodeIsLeafOfLevelK(int k, Node<T> *root);
-
+    void showTNodeAtLevelK(int k, Node<T> *root);
     void rotateRight();
     void rotateLeft();
 
@@ -198,6 +200,29 @@ bool BTree<T>::createBSTreeNumberFromFile(char filename[]){
 }
 
 template <class T>
+bool isBTree(Node<T> *root){
+    if(root == NULL) return true;
+    if(root->getNext() != NULL){
+        if(root->getInfo() > root->getNext()->getInfo()) return false;
+    }
+    if(root->getPrev() != NULL){
+        if(root->getInfo() < root->getPrev()->getInfo()) return false;
+    }
+    bool 
+        l = isBTree(root->getNext()),
+        r = isBTree(root->getPrev());
+    return (l || r);
+}
+
+template <class T>
+bool BTree<T>::isAVL(Node<T> *root){
+    if(root == NULL ) return true;
+    int balance = height(root->getNext()) - height(root->getPrev());
+
+    return (balance == 0);
+}
+
+template <class T>
 int BTree<T>::countTNode(Node<T> *root){
     if(root == NULL) return 0;
     int nl = countTNode(root->getPrev());
@@ -254,6 +279,15 @@ void BTree<T>::showTNodeIsLeafOfLevelK(int k, Node<T> *root){
     k -= 1;
     showTNodeIsLeafOfLevelK(k, root->getPrev());
     showTNodeIsLeafOfLevelK(k, root->getNext());
+}
+
+template <class T>
+void BTree<T>::showTNodeAtLevelK(int k, Node<T> *root){
+    if(root == NULL || k < 0) return;
+    k-=1;
+    root->showInfo();
+    showTNodeAtLevelK(k, root->getNext());
+    showTNodeAtLevelK(k, root->getPrev());
 }
 
 
@@ -435,6 +469,7 @@ bool BTree<T>::deleteTree(Node<T> *root){
     deleteTree(root->getNext());
 
     delete root;
+    setRoot(NULL);
     return true;
 }
 

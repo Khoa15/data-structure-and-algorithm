@@ -14,7 +14,7 @@ private:
     Node<T>* pNext;
     Node<T>* pPrev;
 public:
-    Node() : Info(0), pNext(NULL), pPrev(NULL) {}
+    Node() : pNext(NULL), pPrev(NULL) {}
     Node(T inf) : Info(inf), pNext(NULL), pPrev(NULL) {}
 
     T getInfo();
