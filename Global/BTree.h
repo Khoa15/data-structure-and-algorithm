@@ -2,13 +2,14 @@
 #ifndef _BTree_H_
 #define _BTree_H_
 #include "TNode.h"
-#include "Queue.h"
-#include "Stack.h"
 #include "Number.h"
+#include "LinkedList.h"
+#include <queue>
+#include <stack>
 #include <stdlib.h>
 
 template <class T>
-class BTree : public TNode<T>, public Queue<T>, public Stack<T>
+class BTree : public TNode<T>
 {
 private:
     TNode<T> *Root;
@@ -297,11 +298,11 @@ template <class T>
 void BTree<T>::traverseBreadthNLR(TNode<T> *root){
     if(root == NULL) return;
 
-    Queue<TNode<T> *> q;
+    queue<TNode<T> *> q;
     q.push(root);
 
     while(q.isEmpty() == false){
-        TNode<T> *p = q.top();
+        TNode<T> *p = q.front();
         q.pop();
         p->showInfo();
 
@@ -316,7 +317,7 @@ void BTree<T>::traverseBreadthNLR(TNode<T> *root){
 template <class T>
 void BTree<T>::traverseDepthNLR(TNode<T> *root){
     if(root == NULL) return;
-    Stack<TNode<T> *> stk;
+    stack<TNode<T> *> stk;
     stk.push(root);
     while(stk.isEmpty() == false){
         TNode<T> *tmp = stk.top();
