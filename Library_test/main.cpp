@@ -85,17 +85,25 @@ struct Tree{
 
     void AVL(Node* root){
         if(root == NULL) return;
+        bool flag = false;
         while(1){
             if(balFactor(root) > 1) {
                 rotateRight(root);
+                flag = true;
             }else if(balFactor(root) < -1 ){
                 rotateLeft(root);
+                flag = true;
             }else{
                 break;
             }
         }
-        AVL(root->Left);
-        AVL(root->Right);
+        if(flag == true){
+            AVL(this->Root->Left);
+            AVL(this->Root->Right);
+        }else{
+            AVL(root->Left);
+            AVL(root->Right);
+        }
     }
 };
 
@@ -119,7 +127,9 @@ int main(){
        \
        4
     */
-
+    cout << 
+    tree->height(tree->Root->Left->Left->Left) << " " << 
+    tree->height(tree->Root->Left->Left->Right) << endl;
     cout << endl;
     tree->traverseNLR(tree->Root);
     cout << endl;
